@@ -1,6 +1,6 @@
 package classes.categories;
 
-import classes.Product;
+import classes.models.Product;
 
 import java.util.ArrayList;
 import java.util.List;

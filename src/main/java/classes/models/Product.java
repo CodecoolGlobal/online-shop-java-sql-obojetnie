@@ -1,4 +1,4 @@
-package classes;
+package classes.models;
 
 import classes.categories.Category;
 
@@ -7,14 +7,15 @@ public class Product {
     private int id;
     private String name;
     private double price;
-    private int amount;
+    private int quantity;
     private boolean isAvailable;
     private Category category;
+    private int rate;
 
-    public Product(String name, double price, int amount, Category category) {
+    public Product(String name, double price, int quantity, Category category) {
         this.name = name;
         this.price = price;
-        this.amount = amount;
+        this.quantity = quantity;
         this.category = category;
     }
 
@@ -31,7 +32,7 @@ public class Product {
     }
 
     public int getAmount() {
-        return amount;
+        return quantity;
     }
 
     public boolean isAvailable() {
@@ -42,12 +43,20 @@ public class Product {
         return category;
     }
 
+    public int getRate() {
+        return rate;
+    }
+
+    public void setRate(int rate) {
+        this.rate = rate;
+    }
+
     public void setPrice(double price) {
         this.price = price;
     }
 
-    public void setAmount(int amount) {
-        this.amount = amount;
+    public void setQuantity(int amount) {
+        this.quantity = amount;
     }
 
     public void setAvailable(boolean available) {
