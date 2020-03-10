@@ -13,6 +13,7 @@ public class Category {
     private List<Product> productList;
 
     public Category(String name) {
+        this.name = name;
         productList = new ArrayList<>();
     }
 
