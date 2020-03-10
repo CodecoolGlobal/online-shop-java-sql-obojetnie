@@ -3,7 +3,7 @@ package classes.controllers;
 import classes.categories.Category;
 import classes.enums.Role;
 import classes.models.Product;
-import classes.readers.SqlConnector;
+import classes.SqlConnector;
 import classes.users.User;
 
 import java.sql.*;

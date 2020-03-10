@@ -17,7 +17,6 @@ public class Category {
         productList = new ArrayList<>();
     }
 
-
     public String getName() {
         return name;
     }

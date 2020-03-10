@@ -2,7 +2,7 @@ import classes.categories.Category;
 import classes.controllers.SqlController;
 import classes.enums.Role;
 import classes.models.Product;
-import classes.readers.SqlConnector;
+import classes.SqlConnector;
 import classes.users.Customer;
 
 

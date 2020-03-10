@@ -1,4 +1,4 @@
-package classes.readers;
+package classes;
 
 import java.sql.*;
 
