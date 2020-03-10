@@ -1,17 +1,30 @@
-import classes.models.Basket;
-import classes.models.Order;
-import classes.models.Product;
+import classes.controllers.SqlController;
+import classes.enums.Role;
+import classes.readers.SqlConnector;
 import classes.users.Customer;
 
-import java.time.LocalDate;
+import java.sql.SQLException;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         System.out.println("Hello!");
 
-        Order order = new Order(new Basket(), new Customer());
-        System.out.println(order.getCreationDate());
+        SqlConnector sqlConnector = new SqlConnector();
+        sqlConnector.connectToDatabase();
+
+        SqlController sqlController = new SqlController(sqlConnector);
+
+        sqlController.viewUsersTable();
+
+        Customer customer = new Customer("andrzej", "chrzan", "andrewatgmail.com", Role.CUSTOMER);
+
+        sqlController.addUser(customer);
+
+        sqlController.viewUsersTable();
+
+        sqlConnector.disconnectFromDatabase();
+
 
     }
 }

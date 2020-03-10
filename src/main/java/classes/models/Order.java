@@ -20,8 +20,44 @@ public class Order {
         this.user = user;
     }
 
+    public Basket getBasket() {
+        return basket;
+    }
+
+    public void setBasket(Basket basket) {
+        this.basket = basket;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public Date getCreationDate() {
         return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    public Date getOrderPayAt() {
+        return orderPayAt;
+    }
+
+    public void setOrderPayAt(Date orderPayAt) {
+        this.orderPayAt = orderPayAt;
     }
 
 }
