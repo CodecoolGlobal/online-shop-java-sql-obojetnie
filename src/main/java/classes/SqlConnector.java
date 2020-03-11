@@ -15,7 +15,7 @@ public class SqlConnector {
     public void connectToDatabase() {
         try {
             Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:/home/szniemiec/IdeaProjects/OnlineShopJavaSQL/src/main/resources/shop");
+            c = DriverManager.getConnection("jdbc:sqlite:src/main/resources/shop");
 
             c.setAutoCommit(false);
 

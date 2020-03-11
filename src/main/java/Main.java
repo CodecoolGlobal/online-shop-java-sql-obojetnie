@@ -46,6 +46,13 @@ public class Main {
 
         System.out.println("sloneczkoooo");
 
+        Product soap = new Product("Soap", 1.99, 30, hygiene);
+        System.out.println(sqlController.getIsProductInDatabase(soap));
+        sqlController.addProduct(soap);
+
+        sqlController.viewProductsTable();
+
+
         sqlConnector.disconnectFromDatabase();
 
 
