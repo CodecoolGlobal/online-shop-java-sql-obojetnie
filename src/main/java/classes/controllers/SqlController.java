@@ -197,7 +197,7 @@ public class SqlController {
         
         final String UPDATE_SQL = "UPDATE products " +
                 "SET name = ? " +
-                "WHERE name = ?";
+                "WHERE name = ?;";
 
         PreparedStatement ps = null;
 
@@ -212,11 +212,26 @@ public class SqlController {
     }
     
     public void editProductPrice(Product product, double price) {
-        
+        String nameOfProductInDatabase = product.getName();
+
+        final String UPDATE_SQL = "UPDATE products " +
+                "SET price = ? " +
+                "WHERE name = ?;";
+
+        PreparedStatement ps = null;
+
+        try {
+            ps = this.c.prepareStatement(UPDATE_SQL);
+            ps.setDouble(1, price);
+            ps.setString(2, nameOfProductInDatabase);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
     
     public void editProductQuantity(Product product, int quantity) {
-        
+
     }
 
     public Product getProductFromDatabase(String name) {
@@ -283,7 +298,7 @@ public class SqlController {
         int quantityOfProductInDatabase = getProductFromDatabase(name).getQuantity();
         final String UPDATE_SQL = "UPDATE products " +
                 "SET quantity = ? " +
-                " WHERE name = ?";
+                " WHERE name = ?;";
 
         PreparedStatement ps = null;
 
