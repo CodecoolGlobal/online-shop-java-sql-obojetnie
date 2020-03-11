@@ -191,6 +191,63 @@ public class SqlController {
         }
         return false;
     }
+    
+    public void editProductName(Product product, String newName) {
+        String nameOfProductInDatabase = product.getName();
+        
+        final String UPDATE_SQL = "UPDATE products " +
+                "SET name = ? " +
+                "WHERE name = ?;";
+
+        PreparedStatement ps = null;
+
+        try {
+            ps = this.c.prepareStatement(UPDATE_SQL);
+            ps.setString(1, newName);
+            ps.setString(2, nameOfProductInDatabase);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void editProductPrice(Product product, double price) {
+        String nameOfProductInDatabase = product.getName();
+
+        final String UPDATE_SQL = "UPDATE products " +
+                "SET price = ? " +
+                "WHERE name = ?;";
+
+        PreparedStatement ps = null;
+
+        try {
+            ps = this.c.prepareStatement(UPDATE_SQL);
+            ps.setDouble(1, price);
+            ps.setString(2, nameOfProductInDatabase);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void editProductQuantity(Product product, int quantity) {
+        String nameOfProductInDatabase = product.getName();
+
+        final String UPDATE_SQL = "UPDATE products " +
+                "SET quantity = ? " +
+                "WHERE name = ?;";
+
+        PreparedStatement ps = null;
+
+        try {
+            ps = this.c.prepareStatement(UPDATE_SQL);
+            ps.setInt(1, quantity);
+            ps.setString(2, nameOfProductInDatabase);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public Product getProductFromDatabase(String name) {
         String SELECT_SQL = "SELECT * FROM products WHERE name = '" + name + "';";
@@ -256,7 +313,7 @@ public class SqlController {
         int quantityOfProductInDatabase = getProductFromDatabase(name).getQuantity();
         final String UPDATE_SQL = "UPDATE products " +
                 "SET quantity = ? " +
-                "WHERE name = ?";
+                " WHERE name = ?;";
 
         PreparedStatement ps = null;
 
