@@ -6,6 +6,7 @@ import classes.categories.Category;
 import java.sql.*;
 
 public class CategoryController {
+
     private Connection c;
     private Statement st;
 

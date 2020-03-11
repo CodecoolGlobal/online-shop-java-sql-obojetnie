@@ -1,6 +1,7 @@
 import classes.categories.Category;
 import classes.controllers.CategoryController;
 import classes.controllers.ProductController;
+import classes.controllers.SqlController;
 import classes.controllers.UserController;
 import classes.enums.Role;
 import classes.models.Product;
@@ -20,9 +21,11 @@ public class Main {
         SqlConnector sqlConnector = new SqlConnector();
         sqlConnector.connectToDatabase();
 
-        CategoryController categoryController = new CategoryController(sqlConnector);
-        ProductController productController = new ProductController(sqlConnector);
-        UserController userController = new UserController(sqlConnector);
+        SqlController sqlController = new SqlController(sqlConnector);
+
+        CategoryController categoryController = sqlController.getCategoryController();
+        ProductController productController = sqlController.getProductController();
+        UserController userController = sqlController.getUserController();
 
         userController.viewUsersTable();
 
