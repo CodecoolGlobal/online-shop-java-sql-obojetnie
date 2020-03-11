@@ -200,6 +200,38 @@ public class SqlController {
         return null;
     }
 
+    public boolean getIsLoginTaken(String login) {
+        final String SELECT_SQL = "SELECT login FROM users WHERE login = '" + login + "';";
+
+        try {
+            ResultSet rs = st.executeQuery(SELECT_SQL);
+            while (rs.next()){
+                if (rs.getString("Login").equals(login)) {
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean getIsEmailTaken(String email) {
+        final String SELECT_SQL = "SELECT email FROM users WHERE email = '" + email + "';";
+
+        try {
+            ResultSet rs = st.executeQuery(SELECT_SQL);
+            while (rs.next()){
+                if (rs.getString("Email").equals(email)) {
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public void updateQuantity(Product product) {
         int quantityAddon = product.getQuantity();
         String name = product.getName();
