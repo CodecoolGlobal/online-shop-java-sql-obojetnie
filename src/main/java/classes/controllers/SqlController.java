@@ -174,6 +174,24 @@ public class SqlController {
         return false;
     }
 
+    public boolean getIsCategoryInDatabase(Category category) {
+        String name = category.getName();
+
+        final String SELECT_SQL = "SELECT name FROM categories WHERE name = '" + name + "';";
+
+        try {
+            ResultSet rs = st.executeQuery(SELECT_SQL);
+            while (rs.next()){
+                if (rs.getString("Name").equals(name)) {
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public Product getProductFromDatabase(String name) {
         String SELECT_SQL = "SELECT * FROM products WHERE name = '" + name + "';";
         try {
