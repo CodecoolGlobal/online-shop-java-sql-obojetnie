@@ -3,8 +3,6 @@ package classes.menus;
 import classes.categories.Category;
 import classes.models.Product;
 
-import javax.sound.midi.Soundbank;
-import java.sql.SQLOutput;
 
 public class AdminMenu {
     InputTaker input = new InputTaker();
