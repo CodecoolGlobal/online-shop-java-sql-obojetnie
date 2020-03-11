@@ -231,7 +231,22 @@ public class SqlController {
     }
     
     public void editProductQuantity(Product product, int quantity) {
+        String nameOfProductInDatabase = product.getName();
 
+        final String UPDATE_SQL = "UPDATE products " +
+                "SET quantity = ? " +
+                "WHERE name = ?;";
+
+        PreparedStatement ps = null;
+
+        try {
+            ps = this.c.prepareStatement(UPDATE_SQL);
+            ps.setInt(1, quantity);
+            ps.setString(2, nameOfProductInDatabase);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public Product getProductFromDatabase(String name) {
