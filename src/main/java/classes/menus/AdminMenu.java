@@ -80,4 +80,36 @@ public class AdminMenu {
             }
         }
     }
+
+    public void CreateCategory() {
+
+    }
+
+    public void deleteCategory() {
+
+    }
+
+    public void editCategory() {
+
+    }
+
+    public void addProduct() {
+
+    }
+
+    public void deleteProduct() {
+
+    }
+
+    public void editProduct() {
+
+    }
+
+    public void checkOngoingOrders() {
+
+    }
+
+    public void collectFeedback() {
+
+    }
 }
