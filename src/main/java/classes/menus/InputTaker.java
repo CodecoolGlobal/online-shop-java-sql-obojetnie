@@ -3,6 +3,7 @@ package classes.menus;
 import java.util.Scanner;
 
 public class InputTaker {
+  
     Scanner scanner = new Scanner(System.in);
 
     public int getIntInput() {
