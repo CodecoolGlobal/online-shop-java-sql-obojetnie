@@ -1,5 +1,6 @@
 import classes.categories.Category;
 import classes.controllers.CategoryController;
+import classes.controllers.ProductController;
 import classes.controllers.SqlController;
 import classes.enums.Role;
 import classes.models.Product;
@@ -21,6 +22,7 @@ public class Main {
 
         SqlController sqlController = new SqlController(sqlConnector);
         CategoryController categoryController = new CategoryController(sqlConnector);
+        ProductController productController = new ProductController(sqlConnector);
 
         sqlController.viewUsersTable();
 
@@ -42,9 +44,9 @@ public class Main {
         categoryController.addCategory(nonCategorized);
 
         Product product = new Product("Ruskach", 123.36, 52, beverages);
-        sqlController.addProduct(product);
+        productController.addProduct(product);
 
-        sqlController.viewProductsTable();
+        productController.viewProductsTable();
 
         System.out.println();
         System.out.println("sloneczkooo");
@@ -57,18 +59,18 @@ public class Main {
         System.out.println();
 
         Product soap = new Product("Soap", 1.99, 30, hygiene);
-        System.out.println(sqlController.getIsProductInDatabase(soap));
-        sqlController.addProduct(soap);
+        System.out.println(productController.getIsProductInDatabase(soap));
+        productController.addProduct(soap);
 
-        sqlController.viewProductsTable();
+        productController.viewProductsTable();
 
         System.out.println();
         System.out.println("sloneczkooooo");
         System.out.println();
 
-        sqlController.updateAvailability(soap, 0);
+        productController.updateAvailability(soap, 0);
 
-        sqlController.viewProductsTable();
+        productController.viewProductsTable();
 
         System.out.println();
         System.out.println("sloneczkoooooo");
