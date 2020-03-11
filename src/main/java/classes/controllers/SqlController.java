@@ -210,6 +210,24 @@ public class SqlController {
             e.printStackTrace();
         }
     }
+
+    public void editCategoryName(Category category, String newName) {
+        String nameOfCategoryInDatabase = category.getName();
+
+        final String UPDATE_SQL = "UPDATE categories " +
+                "SET name = ?" +
+                "WHERE name = ?;";
+
+        PreparedStatement ps = null;
+
+        try {
+            ps = this.c.prepareStatement(UPDATE_SQL);
+            ps.setString(1, newName);
+            ps.setString(2, nameOfCategoryInDatabase);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     
     public void editProductPrice(Product product, double price) {
         String nameOfProductInDatabase = product.getName();
