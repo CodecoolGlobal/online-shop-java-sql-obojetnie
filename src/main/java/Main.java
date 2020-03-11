@@ -1,5 +1,8 @@
 import classes.categories.Category;
+import classes.controllers.CategoryController;
+import classes.controllers.ProductController;
 import classes.controllers.SqlController;
+import classes.controllers.UserController;
 import classes.enums.Role;
 import classes.models.Product;
 import classes.SqlConnector;
@@ -20,7 +23,11 @@ public class Main {
 
         SqlController sqlController = new SqlController(sqlConnector);
 
-        sqlController.viewUsersTable();
+        CategoryController categoryController = sqlController.getCategoryController();
+        ProductController productController = sqlController.getProductController();
+        UserController userController = sqlController.getUserController();
+
+        userController.viewUsersTable();
 
         System.out.println();
         System.out.println("sloneczko");
@@ -28,52 +35,51 @@ public class Main {
 
         Customer customer = new Customer("andrzej", "chrzan", "andrewatgmail.com", Role.CUSTOMER);
 
-        sqlController.addUser(customer);
+        userController.addUser(customer);
 
-        sqlController.viewUsersTable();
+        userController.viewUsersTable();
 
         System.out.println();
         System.out.println("sloneczkoo");
         System.out.println();
 
         Category nonCategorized = new Category("Non Categorized");
-        sqlController.addCategory(nonCategorized);
+        categoryController.addCategory(nonCategorized);
 
         Product product = new Product("Ruskach", 123.36, 52, beverages);
-        sqlController.addProduct(product);
+        productController.addProduct(product);
 
-        sqlController.viewProductsTable();
+        productController.viewProductsTable();
 
         System.out.println();
         System.out.println("sloneczkooo");
         System.out.println();
 
-        sqlController.viewCategoriesTable();
+        categoryController.viewCategoriesTable();
 
         System.out.println();
         System.out.println("sloneczkoooo");
         System.out.println();
 
         Product soap = new Product("Soap", 1.99, 30, hygiene);
-        System.out.println(sqlController.getIsProductInDatabase(soap));
-        sqlController.addProduct(soap);
+        System.out.println(productController.getIsProductInDatabase(soap));
+        productController.addProduct(soap);
 
-        sqlController.viewProductsTable();
+        productController.viewProductsTable();
 
         System.out.println();
         System.out.println("sloneczkooooo");
         System.out.println();
 
-        sqlController.updateAvailability(soap, 0);
+        productController.updateAvailability(soap, 0);
 
-        sqlController.viewProductsTable();
+        productController.viewProductsTable();
 
         System.out.println();
         System.out.println("sloneczkoooooo");
         System.out.println();
 
         sqlConnector.disconnectFromDatabase();
-
 
     }
 }
