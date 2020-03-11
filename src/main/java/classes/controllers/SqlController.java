@@ -344,5 +344,23 @@ public class SqlController {
         }
     }
 
+    public void updateAvailability(Product product, int value) {
+        String name = product.getName();
+        final String UPDATE_SQL = "UPDATE products " +
+                "SET availability = ? " +
+                "WHERE name = ?;";
+
+        PreparedStatement ps = null;
+
+        try {
+            ps = this.c.prepareStatement(UPDATE_SQL);
+            ps.setInt(1, value);
+            ps.setString(2, name);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
 
