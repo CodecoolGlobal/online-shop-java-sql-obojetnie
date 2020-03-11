@@ -1,7 +1,7 @@
 import classes.categories.Category;
 import classes.controllers.CategoryController;
 import classes.controllers.ProductController;
-import classes.controllers.SqlController;
+import classes.controllers.UserController;
 import classes.enums.Role;
 import classes.models.Product;
 import classes.SqlConnector;
@@ -20,11 +20,11 @@ public class Main {
         SqlConnector sqlConnector = new SqlConnector();
         sqlConnector.connectToDatabase();
 
-        SqlController sqlController = new SqlController(sqlConnector);
         CategoryController categoryController = new CategoryController(sqlConnector);
         ProductController productController = new ProductController(sqlConnector);
+        UserController userController = new UserController(sqlConnector);
 
-        sqlController.viewUsersTable();
+        userController.viewUsersTable();
 
         System.out.println();
         System.out.println("sloneczko");
@@ -32,9 +32,9 @@ public class Main {
 
         Customer customer = new Customer("andrzej", "chrzan", "andrewatgmail.com", Role.CUSTOMER);
 
-        sqlController.addUser(customer);
+        userController.addUser(customer);
 
-        sqlController.viewUsersTable();
+        userController.viewUsersTable();
 
         System.out.println();
         System.out.println("sloneczkoo");
@@ -77,7 +77,6 @@ public class Main {
         System.out.println();
 
         sqlConnector.disconnectFromDatabase();
-
 
     }
 }
