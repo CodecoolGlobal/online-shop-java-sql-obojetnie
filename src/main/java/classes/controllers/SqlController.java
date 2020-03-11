@@ -191,6 +191,33 @@ public class SqlController {
         }
         return false;
     }
+    
+    public void editProductName(Product product, String newName) {
+        String nameOfProductInDatabase = product.getName();
+        
+        final String UPDATE_SQL = "UPDATE products " +
+                "SET name = ? " +
+                "WHERE name = ?";
+
+        PreparedStatement ps = null;
+
+        try {
+            ps = this.c.prepareStatement(UPDATE_SQL);
+            ps.setString(1, newName);
+            ps.setString(2, nameOfProductInDatabase);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void editProductPrice(Product product, double price) {
+        
+    }
+    
+    public void editProductQuantity(Product product, int quantity) {
+        
+    }
 
     public Product getProductFromDatabase(String name) {
         String SELECT_SQL = "SELECT * FROM products WHERE name = '" + name + "';";
