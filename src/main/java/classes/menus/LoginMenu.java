@@ -62,12 +62,14 @@ public class LoginMenu {
                         Pattern pattern = Pattern.compile(regex);
 
                         boolean isPasswordChoosen = false;
-                        while (!isPasswordChoosen){
+                        while(!isPasswordChoosen){
                             System.out.println("Password must contain at least 8 max 16 characters.");
                             password = input.getStringInputWithMessage("Enter password: ");
-                            Matcher matcher = pattern.matcher(password);
-                            if (matcher.matches()) {
+                            // Matcher matcher = pattern.matcher(password);
+                            if (password.matches(regex)) {
                                 isPasswordChoosen = true;
+                                flag = false;
+
                             }
                             else {
                                 System.out.println("Incorrect password");
