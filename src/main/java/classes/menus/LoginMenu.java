@@ -1,5 +1,6 @@
 package classes.menus;
 
+import classes.enums.Option;
 import classes.enums.Role;
 import classes.users.Admin;
 import classes.users.Customer;
@@ -10,7 +11,7 @@ public class LoginMenu {
     Admin createdAdmin;
     Customer createdCustomer;
 
-    public void displayLoginMenu() {
+    public void displayLoginMenu() throws Exception {
         boolean isRunning = true;
         System.out.println("Welcome to the Online Shop!");
         while(isRunning) {
@@ -18,13 +19,13 @@ public class LoginMenu {
                     (1) Log in
                     (2) Create new user
                     (0) Exit""");
-            int userInput = input.getIntInput();
-            switch (userInput) {
-                case 1 -> {
+            Option option = input.getOptionInt();
+            switch (option) {
+                case ONE -> {
                     String loginInput = input.getStringInputWithMessage("Please enter your login: ");
                     String passwordInput = input.getStringInputWithMessage("Please enter your password: ");
                 }
-                case 2 -> {
+                case TWO -> {
                     String role = input.getStringInputWithMessage("Are you an admin or a customer?");
                     String login = input.getStringInputWithMessage("Enter login: ");
                     String password = input.getStringInputWithMessage("Enter password: ");
@@ -38,7 +39,7 @@ public class LoginMenu {
                             break;
                     }
                 }
-                case 0 -> isRunning = false;
+                case ZERO -> isRunning = false;
             }
         }
 
