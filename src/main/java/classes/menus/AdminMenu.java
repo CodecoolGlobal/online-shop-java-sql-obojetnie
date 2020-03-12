@@ -1,13 +1,14 @@
 package classes.menus;
 
 import classes.categories.Category;
+import classes.enums.Option;
 import classes.models.Product;
 
 
 public class AdminMenu {
     InputTaker input = new InputTaker();
 
-    public void displayAdminMenu() {
+    public void displayAdminMenu() throws Exception {
         boolean isRunning = true;
         System.out.println("You are logged as admin");
         while(isRunning) {
@@ -22,9 +23,9 @@ public class AdminMenu {
                     (8) See list of ongoing orders
                     (0) Quit""");
 
-            int userInput = input.getIntInput();
-            switch(userInput) {
-                case 1:
+            Option option = input.getOptionInt();
+            switch(option) {
+                case ONE:
                     String productName = input.getStringInputWithMessage("Enter a product name: ");
                     double productPrice = input.getIntinputWithMessage("Enter price of product: ");
                     int productQuantity = input.getIntinputWithMessage("Enter quantity of product: ");
@@ -33,50 +34,52 @@ public class AdminMenu {
 
                     Product createdProduct = new Product(productName, productPrice, productQuantity, category);
                     break;
-                case 2:
+                case TWO:
                     String createdCategory = input.getStringInputWithMessage("Enter name of new product category: ");
                     Category newCategory = new Category(createdCategory);
                     break;
-                case 3:
+                case THREE:
                     System.out.println("""
                             (1) Product name
                             (2) Product price
                             (3) Product quantity
                             (4) Product category""");
-                    int userChoice = input.getIntinputWithMessage("What do you want to edit?");
-
-                    switch(userChoice) {
-                        case 1:
+                    System.out.println("What do you want to edit?");
+                    option = input.getOptionInt();
+                    switch(option) {
+                        case ONE:
                             System.out.println("Editing product name");
-                        case 2:
+                        case TWO:
                             System.out.println("Editing product price");
-                        case 3:
+                        case THREE:
                             System.out.println("Editing product quantity");
-                        case 4:
+                        case FOUR:
                             System.out.println("Editing product category");
                             break;
+                        default: throw new Exception("Something went wrong.");
                     }
-                case 4:
+                case FOUR:
                     String editCategoryName = input.getStringInputWithMessage("Which category name do you want to edit?");
                     System.out.println("Changing category name");
                     break;
-                case 5:
+                case FIVE:
                     //there will be list of products
                     String deactivatedProduct = input.getStringInputWithMessage("Which product do you want to deactivate?");
                     break;
-                case 6:
+                case SIX:
                     //collecting User rates of products
                     System.out.println("Collect feedback");
                     break;
-                case 7:
+                case SEVEN:
                     // table with statistics
                     System.out.println("Statistics from users");
                     break;
-                case 8:
+                case EIGHT:
                     //table with ongoing orders
                     System.out.println("List of ongoing orders");
-                case 0:
+                case NINE:
                     isRunning = false;
+                default: throw new Exception("Something went wrong.");
             }
         }
     }
