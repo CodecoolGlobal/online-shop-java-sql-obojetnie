@@ -1,10 +1,12 @@
 package classes.menus;
 
+import classes.enums.Option;
+
 public class CustomerMenu {
     InputTaker input = new InputTaker();
 
 
-    public void displayCustomerMenu() {
+    public void displayCustomerMenu() throws Exception {
         boolean isRunning = true;
         System.out.println("You are logged as customer");
         while(isRunning) {
@@ -20,38 +22,35 @@ public class CustomerMenu {
                     (9) Rate product
                     (10) See statistic of your orders
                     (0) Quit""");
-            int userInput = input.getIntInput();
-            switch (userInput) {
-                case 1:
-                    addItemToBasket();
+            Option option = input.getOptionInt();
+            switch (option) {
+                case ONE:
                     break;
-                case 2:
-                    deleteItemFromBasket();
+                case TWO:
                     break;
-                case 3:
+                case THREE:
                     checkBasket();
                     break;
-                case 4:
+                case FOUR:;
                     placeOrder();
                     break;
-                case 5:
+                case FIVE:
                     ordersHistory();
                     break;
-                case 6:
+                case SIX:
                     viewListOfAvailableProducts();
                     break;
-                case 7:
+                case SEVEN:
                     viewProductsInCategory();
                     break;
-                case 8:
+                case EIGHT:
                     checkIfProductAvailable();
                     break;
-                case 9:
+                case NINE:
                     rateItem();
-                case 10:
-                    getOrdersStatistics();
-                case 0:
+                case ZERO:
                     isRunning = false;
+                default: throw new Exception("Something went wrong.");
             }
         }
     }
