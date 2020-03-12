@@ -22,7 +22,6 @@ public class AdminMenu {
                     (7) See statistics of user feedbacks
                     (8) See list of ongoing orders
                     (0) Quit""");
-
             Option option = input.getOptionInt();
             switch(option) {
                 case ONE:

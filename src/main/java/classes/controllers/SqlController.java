@@ -2,6 +2,8 @@ package classes.controllers;
 
 import classes.SqlConnector;
 
+import java.sql.SQLException;
+
 public class SqlController {
 
     private SqlConnector sqlConnector;
@@ -30,5 +32,14 @@ public class SqlController {
 
     public SqlConnector getSqlConnector() {
         return sqlConnector;
+    }
+
+    public void disconnectController() throws SQLException {
+        getCategoryController().getC().close();
+        getCategoryController().getSt().close();
+        getUserController().getC().close();
+        getUserController().getSt().close();
+        getProductController().getC().close();
+        getProductController().getSt().close();
     }
 }

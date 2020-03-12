@@ -13,14 +13,19 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LoginMenu {
-    SqlController sqlController = new SqlController(new SqlConnector());
 
-    InputTaker input = new InputTaker();
-    Admin createdAdmin;
-    Customer createdCustomer;
+    SqlConnector sqlConnector;
+    SqlController sqlController;
+    InputTaker input;
+
+    public LoginMenu() {
+        sqlConnector = new SqlConnector();
+        sqlConnector.connectToDatabase();
+        sqlController = new SqlController(sqlConnector);
+        input = new InputTaker();
+    }
 
     public void displayLoginMenu() throws Exception {
-        sqlController.getSqlConnector().connectToDatabase();
         boolean isRunning = true;
         System.out.println("Welcome to the Online Shop!");
         while(isRunning) {
@@ -53,7 +58,7 @@ public class LoginMenu {
 
                     flag = true;
                     while (flag) {
-                        String regex = "^[a-zA-Z0-9]+{8,16}";
+                        String regex = "^[a-zA-Z0-9]{8,16}";
                         Pattern pattern = Pattern.compile(regex);
 
                         boolean isPasswordChoosen = false;
@@ -89,7 +94,10 @@ public class LoginMenu {
                     userController.viewUsersTable();
 
                 }
-                case ZERO -> isRunning = false;
+                case ZERO -> {
+                    sqlController.disconnectController();
+                    isRunning = false;
+                }
             }
         }
 

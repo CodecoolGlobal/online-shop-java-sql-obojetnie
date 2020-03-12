@@ -100,5 +100,12 @@ public class UserController {
         return false;
     }
 
+    public Connection getC() {
+        return c;
+    }
+
+    public Statement getSt() {
+        return st;
+    }
 
 }
