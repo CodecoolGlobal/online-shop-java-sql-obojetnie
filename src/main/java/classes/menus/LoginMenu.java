@@ -32,11 +32,13 @@ public class LoginMenu {
                     switch (role) {
                         case "a":
                             createdAdmin = new Admin(login, password, email, Role.ADMIN);
+                            break;
                         case "c":
                             createdCustomer = new Customer(login, password, email, Role.CUSTOMER);
+                            break;
                     }
                 }
-                case 3 -> isRunning = false;
+                case 0 -> isRunning = false;
             }
         }
 
