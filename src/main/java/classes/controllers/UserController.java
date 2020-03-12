@@ -69,12 +69,12 @@ public class UserController {
     }
 
     public boolean getIsLoginTaken(String login) {
-        final String SELECT_SQL = "SELECT login FROM users WHERE login = '" + login + "';";
+        final String SELECT_SQL = "SELECT login FROM users;";
 
         try {
             ResultSet rs = st.executeQuery(SELECT_SQL);
             while (rs.next()){
-                if (rs.getString("Login").equals(login)) {
+                if (rs.getString("Login").toLowerCase().equals(login.toLowerCase())) {
                     return true;
                 }
             }
@@ -99,5 +99,6 @@ public class UserController {
         }
         return false;
     }
+
 
 }

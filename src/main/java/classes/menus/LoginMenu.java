@@ -1,17 +1,26 @@
 package classes.menus;
 
+import classes.SqlConnector;
+import classes.controllers.SqlController;
+import classes.controllers.UserController;
 import classes.enums.Option;
 import classes.enums.Role;
 import classes.users.Admin;
 import classes.users.Customer;
+import classes.users.User;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class LoginMenu {
+    SqlController sqlController = new SqlController(new SqlConnector());
 
     InputTaker input = new InputTaker();
     Admin createdAdmin;
     Customer createdCustomer;
 
     public void displayLoginMenu() throws Exception {
+        sqlController.getSqlConnector().connectToDatabase();
         boolean isRunning = true;
         System.out.println("Welcome to the Online Shop!");
         while(isRunning) {
@@ -26,18 +35,59 @@ public class LoginMenu {
                     String passwordInput = input.getStringInputWithMessage("Please enter your password: ");
                 }
                 case TWO -> {
-                    String role = input.getStringInputWithMessage("Are you an admin or a customer?");
-                    String login = input.getStringInputWithMessage("Enter login: ");
-                    String password = input.getStringInputWithMessage("Enter password: ");
-                    String email = input.getStringInputWithMessage("Enter email: ");
-                    switch (role) {
-                        case "a":
-                            createdAdmin = new Admin(login, password, email, Role.ADMIN);
-                            break;
-                        case "c":
-                            createdCustomer = new Customer(login, password, email, Role.CUSTOMER);
-                            break;
+                    UserController userController = sqlController.getUserController();
+                    String login = "";
+                    String password = "";
+                    String email = "";
+
+                    boolean flag = true;
+                    while (flag) {
+                        login = input.getStringInputWithMessage("Enter login: ");
+                        if (userController.getIsLoginTaken(login)) {
+                            System.out.println("Login is already taken");
+                        }
+                        else {
+                            flag = false;
+                        }
                     }
+
+                    flag = true;
+                    while (flag) {
+                        String regex = "^[a-zA-Z0-9]+{8,16}";
+                        Pattern pattern = Pattern.compile(regex);
+
+                        boolean isPasswordChoosen = false;
+                        while (!isPasswordChoosen){
+                            System.out.println("Password must contain at least 8 max 16 characters.");
+                            password = input.getStringInputWithMessage("Enter password: ");
+                            Matcher matcher = pattern.matcher(password);
+                            if (matcher.matches()) {
+                                isPasswordChoosen = true;
+                            }
+                            else {
+                                System.out.println("Incorrect password");
+                            }
+                        }
+                    }
+
+                    flag = true;
+                    while (flag) {
+                        email = input.getStringInputWithMessage("Enter email: ");
+                        if (userController.getIsEmailTaken(email)) {
+                            System.out.println("Email is already taken");
+                        }
+                        else {
+                            flag = false;
+                        }
+                    }
+
+                    try {
+                        userController.addUser(new Customer(login, password, email, Role.CUSTOMER));
+                    } catch (Exception e){
+                        throw new Exception ("Something went wrong");
+                    }
+                    userController.viewUsersTable();
+
                 }
                 case ZERO -> isRunning = false;
             }

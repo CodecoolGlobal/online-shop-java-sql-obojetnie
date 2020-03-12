@@ -4,6 +4,7 @@ import classes.SqlConnector;
 
 public class SqlController {
 
+    private SqlConnector sqlConnector;
     private CategoryController categoryController;
     private ProductController productController;
     private UserController userController;
@@ -12,6 +13,7 @@ public class SqlController {
         categoryController = new CategoryController(sqlConnector);
         productController = new ProductController(sqlConnector);
         userController = new UserController(sqlConnector);
+        this.sqlConnector = sqlConnector;
     }
 
     public CategoryController getCategoryController() {
@@ -26,4 +28,7 @@ public class SqlController {
         return userController;
     }
 
+    public SqlConnector getSqlConnector() {
+        return sqlConnector;
+    }
 }
