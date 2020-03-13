@@ -1,17 +1,31 @@
 package classes.menus;
 
+import classes.connectors.SqlConnector;
 import classes.categories.Category;
+import classes.controllers.SqlController;
 import classes.enums.Option;
+import classes.inputs.InputTaker;
 import classes.models.Product;
 
 
 public class AdminMenu {
-    InputTaker input = new InputTaker();
+
+    SqlConnector sqlConnector;
+    SqlController sqlController;
+    InputTaker input;
+
+    public AdminMenu() throws Exception {
+        sqlConnector = new SqlConnector();
+        sqlConnector.connectToDatabase();
+        sqlController = new SqlController(sqlConnector);
+        input = new InputTaker();
+        displayAdminMenu();
+    }
 
     public void displayAdminMenu() throws Exception {
         boolean isRunning = true;
         System.out.println("You are logged as admin");
-        while(isRunning) {
+        while (isRunning) {
             System.out.println("""
                     (1) Create new product
                     (2) Create new product category
@@ -23,7 +37,7 @@ public class AdminMenu {
                     (8) See list of ongoing orders
                     (0) Quit""");
             Option option = input.getOptionInt();
-            switch(option) {
+            switch (option) {
                 case ONE:
                     String productName = input.getStringInputWithMessage("Enter a product name: ");
                     double productPrice = input.getIntinputWithMessage("Enter price of product: ");
@@ -45,7 +59,7 @@ public class AdminMenu {
                             (4) Product category""");
                     System.out.println("What do you want to edit?");
                     option = input.getOptionInt();
-                    switch(option) {
+                    switch (option) {
                         case ONE:
                             System.out.println("Editing product name");
                         case TWO:
@@ -55,7 +69,8 @@ public class AdminMenu {
                         case FOUR:
                             System.out.println("Editing product category");
                             break;
-                        default: throw new Exception("Something went wrong.");
+                        default:
+                            throw new Exception("Something went wrong.");
                     }
                 case FOUR:
                     String editCategoryName = input.getStringInputWithMessage("Which category name do you want to edit?");
@@ -78,7 +93,8 @@ public class AdminMenu {
                     System.out.println("List of ongoing orders");
                 case NINE:
                     isRunning = false;
-                default: throw new Exception("Something went wrong.");
+                default:
+                    throw new Exception("Something went wrong.");
             }
         }
     }

@@ -1,14 +1,13 @@
 package classes.menus;
 
-import classes.SqlConnector;
+import classes.connectors.SqlConnector;
 import classes.controllers.SqlController;
 import classes.controllers.UserController;
 import classes.enums.Option;
 import classes.enums.Role;
+import classes.inputs.InputTaker;
 import classes.users.Customer;
-import classes.users.User;
 
-import java.sql.SQLException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -141,13 +140,9 @@ public class LoginMenu {
         checkIfPasswordMatches(userController, loginInput);
         int idRole = userController.getIdRole(loginInput);
         switch (idRole) {
-            case 1:
-                new AdminMenu();
-                break;
-            case 2:
-                new CustomerMenu();
-                break;
-            default: throw new Exception("Something went wrong.");
+            case 1 -> new AdminMenu();
+            case 2 -> new CustomerMenu();
+            default -> throw new Exception("Something went wrong.");
         }
     }
 }

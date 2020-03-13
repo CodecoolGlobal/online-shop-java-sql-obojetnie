@@ -1,10 +1,23 @@
 package classes.menus;
 
+import classes.connectors.SqlConnector;
+import classes.controllers.SqlController;
 import classes.enums.Option;
+import classes.inputs.InputTaker;
 
 public class CustomerMenu {
-    InputTaker input = new InputTaker();
 
+    SqlConnector sqlConnector;
+    SqlController sqlController;
+    InputTaker input;
+
+    public CustomerMenu() throws Exception {
+        sqlConnector = new SqlConnector();
+        sqlConnector.connectToDatabase();
+        sqlController = new SqlController(sqlConnector);
+        input = new InputTaker();
+        displayCustomerMenu();
+    }
 
     public void displayCustomerMenu() throws Exception {
         boolean isRunning = true;

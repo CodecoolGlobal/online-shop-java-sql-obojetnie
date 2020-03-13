@@ -1,6 +1,6 @@
 package classes.controllers;
 
-import classes.SqlConnector;
+import classes.connectors.SqlConnector;
 
 import java.sql.SQLException;
 

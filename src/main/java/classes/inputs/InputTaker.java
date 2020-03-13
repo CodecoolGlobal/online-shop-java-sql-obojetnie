@@ -1,4 +1,4 @@
-package classes.menus;
+package classes.inputs;
 
 import classes.enums.Option;
 

@@ -6,7 +6,7 @@ import classes.controllers.UserController;
 import classes.enums.Role;
 import classes.menus.LoginMenu;
 import classes.models.Product;
-import classes.SqlConnector;
+import classes.connectors.SqlConnector;
 import classes.users.Customer;
 
 
