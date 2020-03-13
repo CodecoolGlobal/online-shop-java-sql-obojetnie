@@ -143,8 +143,10 @@ public class LoginMenu {
         switch (idRole) {
             case 1:
                 new AdminMenu();
+                break;
             case 2:
                 new CustomerMenu();
+                break;
             default: throw new Exception("Something went wrong.");
         }
     }
