@@ -6,7 +6,10 @@ import classes.controllers.UserController;
 import classes.enums.Option;
 import classes.enums.Role;
 import classes.users.Customer;
+import classes.users.User;
 
+import java.sql.SQLException;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LoginMenu {
@@ -33,26 +36,10 @@ public class LoginMenu {
             Option option = input.getOptionInt();
             switch (option) {
                 case ONE -> {
-                    String loginInput = input.getStringInputWithMessage("Please enter your login: ");
-                    String passwordInput = input.getStringInputWithMessage("Please enter your password: ");
+                    login();
                 }
                 case TWO -> {
-                    UserController userController = sqlController.getUserController();
-                    String login = "";
-                    String password = "";
-                    String email = "";
-
-                    login = getCustomerLogin(userController, login);
-                    password = getCustomerPassword(password);
-                    email = getCustomerEmail(userController, email);
-
-                    try {
-                        userController.addUser(new Customer(login, password, email, Role.CUSTOMER));
-                    } catch (Exception e) {
-                        throw new Exception("Something went wrong");
-                    }
-                    userController.viewUsersTable();
-
+                    createAccount();
                 }
                 case ZERO -> {
                     sqlController.disconnectController();
@@ -63,10 +50,9 @@ public class LoginMenu {
 
     }
 
-    private String getCustomerEmail(UserController userController, String email) {
-        boolean flag;
-
-        flag = true;
+    private String createCustomerEmail(UserController userController) {
+        String email = "";
+        boolean flag = true;
         while (flag) {
             email = input.getStringInputWithMessage("Enter email: ");
             if (userController.getIsEmailTaken(email)) {
@@ -78,18 +64,17 @@ public class LoginMenu {
         return email;
     }
 
-    private String getCustomerPassword(String password) {
-        String regex = "^[a-zA-Z0-9]{8,16}";
+    private String createCustomerPassword() {
+        String regex = "^[a-zA-Z0-9]{8,16}$";
         Pattern pattern = Pattern.compile(regex);
-
+        String password = "";
         boolean isPasswordChoosen = false;
         while (!isPasswordChoosen) {
             System.out.println("Password must contain at least 8 max 16 characters.");
             password = input.getStringInputWithMessage("Enter password: ");
-            // Matcher matcher = pattern.matcher(password);
-            if (password.matches(regex)) {
+            Matcher matcher = pattern.matcher(password);
+            if (matcher.matches()) {
                 isPasswordChoosen = true;
-
             } else {
                 System.out.println("Incorrect password");
             }
@@ -97,7 +82,8 @@ public class LoginMenu {
         return password;
     }
 
-    private String getCustomerLogin(UserController userController, String login) {
+    private String createCustomerLogin(UserController userController) {
+        String login = "";
         boolean flag = true;
         while (flag) {
             login = input.getStringInputWithMessage("Enter login: ");
@@ -109,4 +95,60 @@ public class LoginMenu {
         }
         return login;
     }
+
+    private void createAccount() throws Exception {
+        UserController userController = sqlController.getUserController();
+        String login = createCustomerLogin(userController);
+        String password = createCustomerPassword();
+        String email = createCustomerEmail(userController);
+
+        try {
+            userController.addUser(new Customer(login, password, email, Role.CUSTOMER));
+        } catch (Exception e) {
+            throw new Exception("Something went wrong");
+        }
+    }
+
+    private String getLoginFromUser(UserController userController) {
+        String loginInput = "";
+        boolean isLoginValid = false;
+        while (!isLoginValid) {
+            loginInput = input.getStringInputWithMessage("Please enter your login: ");
+            if (userController.getIsLoginTaken(loginInput)) {
+                isLoginValid = true;
+            } else {
+                System.out.println("Invalid login");
+            }
+        }
+        return loginInput;
+    }
+
+    private String getPasswordFromUser(UserController userController, String loginInput) {
+        String passwordInput = "";
+        boolean isPasswordValid = false;
+        while (!isPasswordValid) {
+            passwordInput = input.getStringInputWithMessage("Please enter your password: ");
+            if (userController.getIsPasswordMatching(loginInput, passwordInput)) {
+                isPasswordValid = true;
+            } else {
+                System.out.println("Invalid password");
+            }
+        }
+        return passwordInput;
+    }
+
+    private void login() throws Exception {
+        UserController userController = sqlController.getUserController();
+        String loginInput = getLoginFromUser(userController);
+        String passwordInput = getPasswordFromUser(userController, loginInput);
+        int idRole = userController.getIdRole(loginInput);
+        switch (idRole) {
+            case 1:
+                new AdminMenu();
+            case 2:
+                new CustomerMenu();
+            default: throw new Exception("Something went wrong.");
+        }
+    }
+
 }
