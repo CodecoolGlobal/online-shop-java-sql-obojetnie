@@ -122,8 +122,7 @@ public class LoginMenu {
         }
         return loginInput;
     }
-
-    private String getPasswordFromUser(UserController userController, String loginInput) {
+    private void checkIfPasswordMatches(UserController userController, String loginInput) {
         String passwordInput = "";
         boolean isPasswordValid = false;
         while (!isPasswordValid) {
@@ -134,13 +133,12 @@ public class LoginMenu {
                 System.out.println("Invalid password");
             }
         }
-        return passwordInput;
     }
 
     private void login() throws Exception {
         UserController userController = sqlController.getUserController();
         String loginInput = getLoginFromUser(userController);
-        String passwordInput = getPasswordFromUser(userController, loginInput);
+        checkIfPasswordMatches(userController, loginInput);
         int idRole = userController.getIdRole(loginInput);
         switch (idRole) {
             case 1:
@@ -150,5 +148,4 @@ public class LoginMenu {
             default: throw new Exception("Something went wrong.");
         }
     }
-
 }
