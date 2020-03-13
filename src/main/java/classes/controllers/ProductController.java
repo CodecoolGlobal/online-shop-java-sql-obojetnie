@@ -8,6 +8,7 @@ import java.sql.*;
 
 public class ProductController {
     private Connection c;
+
     private Statement st;
 
     public ProductController(SqlConnector sqlConnector) {
@@ -37,6 +38,7 @@ public class ProductController {
             e.printStackTrace();
         }
     }
+
     public void addProduct(Product product) {
         final String INSERT_SQL = "INSERT INTO products (name, price, quantity, availability, idCategory, rate)" +
                 "VALUES (?, ?, ?, ?, ?, ?);";
@@ -96,7 +98,6 @@ public class ProductController {
         }
         return false;
     }
-
     public void editProductName(Product product, String newName) {
         String nameOfProductInDatabase = product.getName();
 
@@ -179,6 +180,7 @@ public class ProductController {
         }
         return null;
     }
+
     public void updateQuantity(Product product) {
         int quantityAddon = product.getQuantity();
         String name = product.getName();
@@ -198,7 +200,6 @@ public class ProductController {
             e.printStackTrace();
         }
     }
-
     public void updateAvailability(Product product, int value) {
         String name = product.getName();
         final String UPDATE_SQL = "UPDATE products " +
@@ -215,6 +216,14 @@ public class ProductController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public Connection getC() {
+        return c;
+    }
+
+    public Statement getSt() {
+        return st;
     }
 
 }

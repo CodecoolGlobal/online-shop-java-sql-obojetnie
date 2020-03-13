@@ -69,12 +69,12 @@ public class UserController {
     }
 
     public boolean getIsLoginTaken(String login) {
-        final String SELECT_SQL = "SELECT login FROM users WHERE login = '" + login + "';";
+        final String SELECT_SQL = "SELECT login FROM users;";
 
         try {
             ResultSet rs = st.executeQuery(SELECT_SQL);
-            while (rs.next()){
-                if (rs.getString("Login").equals(login)) {
+            while (rs.next()) {
+                if (rs.getString("Login").toLowerCase().equals(login.toLowerCase())) {
                     return true;
                 }
             }
@@ -89,7 +89,7 @@ public class UserController {
 
         try {
             ResultSet rs = st.executeQuery(SELECT_SQL);
-            while (rs.next()){
+            while (rs.next()) {
                 if (rs.getString("Email").equals(email)) {
                     return true;
                 }
@@ -98,6 +98,46 @@ public class UserController {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public boolean getIsPasswordMatching(String login, String password) {
+        final String SELECT_SQL = "SELECT password FROM users WHERE login = '" + login + "';";
+
+        try {
+            ResultSet rs = st.executeQuery(SELECT_SQL);
+            while (rs.next()) {
+                if (rs.getString("Password").equals(password)) {
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public int getIdRole(String login) {
+        final String SELECT_SQL = "SELECT IdRole FROM users WHERE login = '" + login + "';";
+
+        int idRole = 0;
+
+        try {
+            ResultSet rs = st.executeQuery(SELECT_SQL);
+            while (rs.next()) {
+                idRole = rs.getInt("IdRole");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return idRole;
+    }
+
+    public Connection getC() {
+        return c;
+    }
+
+    public Statement getSt() {
+        return st;
     }
 
 }
