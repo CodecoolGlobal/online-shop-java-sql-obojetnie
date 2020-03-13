@@ -41,5 +41,6 @@ public class SqlController {
         getUserController().getSt().close();
         getProductController().getC().close();
         getProductController().getSt().close();
+        sqlConnector.disconnectFromDatabase();
     }
 }

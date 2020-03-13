@@ -7,12 +7,11 @@ import classes.models.Product;
 import java.sql.*;
 
 public class ProductController {
-    private Connection c;
 
+    private Connection c;
     private Statement st;
 
     public ProductController(SqlConnector sqlConnector) {
-//        this.sqlConnector = sqlConnector;
         this.c = sqlConnector.getC();
         this.st = sqlConnector.getSt();
     }

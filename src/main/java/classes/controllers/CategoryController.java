@@ -11,7 +11,6 @@ public class CategoryController {
     private Statement st;
 
     public CategoryController(SqlConnector sqlConnector) {
-//        this.sqlConnector = sqlConnector;
         this.c = sqlConnector.getC();
         this.st = sqlConnector.getSt();
     }

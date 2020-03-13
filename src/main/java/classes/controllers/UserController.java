@@ -7,6 +7,7 @@ import classes.users.User;
 import java.sql.*;
 
 public class UserController {
+
     private Connection c;
     private Statement st;
 
