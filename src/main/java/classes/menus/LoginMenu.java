@@ -46,7 +46,6 @@ public class LoginMenu {
                 }
             }
         }
-
     }
 
     private String createCustomerEmail(UserController userController) {
@@ -121,6 +120,7 @@ public class LoginMenu {
         }
         return loginInput;
     }
+
     private void checkIfPasswordMatches(UserController userController, String loginInput) {
         String passwordInput = "";
         boolean isPasswordValid = false;
