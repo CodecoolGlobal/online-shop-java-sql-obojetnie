@@ -2,10 +2,13 @@ package classes.menus;
 
 import classes.connectors.SqlConnector;
 import classes.categories.Category;
+import classes.controllers.ProductController;
 import classes.controllers.SqlController;
 import classes.enums.Option;
 import classes.inputs.InputTaker;
 import classes.models.Product;
+
+import java.sql.SQLException;
 
 
 public class AdminMenu {
@@ -40,32 +43,13 @@ public class AdminMenu {
             switch (option) {
                 case ONE:
                     addProduct();
-
                     break;
                 case TWO:
                     createCategory();
                     break;
                 case THREE:
-                    System.out.println("""
-                            (1) Product name
-                            (2) Product price
-                            (3) Product quantity
-                            (4) Product category""");
-                    System.out.println("What do you want to edit?");
-                    option = input.getOptionInt();
-                    switch (option) {
-                        case ONE:
-                            System.out.println("Editing product name");
-                        case TWO:
-                            System.out.println("Editing product price");
-                        case THREE:
-                            System.out.println("Editing product quantity");
-                        case FOUR:
-                            System.out.println("Editing product category");
-                            break;
-                        default:
-                            throw new Exception("Something went wrong.");
-                    }
+                    editProduct();
+                    break;
                 case FOUR:
                     String editCategoryName = input.getStringInputWithMessage("Which category name do you want to edit?");
                     System.out.println("Changing category name");
@@ -123,8 +107,40 @@ public class AdminMenu {
 
     }
 
-    public void editProduct() {
+    public void editProduct() throws Exception {
+        Option option;
+        ProductController productController = sqlController.getProductController();
+        productController.viewProductsTable();
+        String productName = input.getStringInputWithMessage("Enter name of product you want to edit: ");
 
+        Product productToEdit = productController.getProductFromDatabase(productName);
+        System.out.println("""
+                            (1) Product name
+                            (2) Product price
+                            (3) Product quantity
+                            (4) Product category""");
+        option = input.getOptionIntWithMessage("What do you want to edit?");
+
+        switch (option) {
+            case ONE:
+                String productNewName = input.getStringInputWithMessage("Enter new name of product: ");
+                productController.editProductName(productToEdit, productNewName);
+                productController.viewProductsTable();
+                break;
+            case TWO:
+                double newPrice = input.getDoubleInputWithMessage("Enter new price of product: ");
+                productController.editProductPrice(productToEdit, newPrice);
+                break;
+            case THREE:
+                int newQuantity = input.getIntinputWithMessage("Enter new quantity of product: ");
+                productController.editProductQuantity(productToEdit, newQuantity);
+                break;
+            case FOUR:
+                String newCategory = input.getStringInputWithMessage("Enter new category of product: ");
+                break;
+            default:
+                throw new Exception("Something went wrong.");
+        }
     }
 
     public void checkOngoingOrders() {
