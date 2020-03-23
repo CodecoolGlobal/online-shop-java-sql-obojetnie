@@ -43,8 +43,7 @@ public class AdminMenu {
 
                     break;
                 case TWO:
-                    String createdCategory = input.getStringInputWithMessage("Enter name of new product category: ");
-                    Category newCategory = new Category(createdCategory);
+                    createCategory();
                     break;
                 case THREE:
                     System.out.println("""
@@ -94,8 +93,10 @@ public class AdminMenu {
         }
     }
 
-    public void CreateCategory() {
-
+    public void createCategory() {
+        String createdCategory = input.getStringInputWithMessage("Enter name of new product category: ");
+        Category category = new Category(createdCategory);
+        sqlController.getCategoryController().addCategory(category);
     }
 
     public void deleteCategory() {
