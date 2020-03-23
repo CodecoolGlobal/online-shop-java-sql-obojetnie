@@ -21,6 +21,11 @@ public class InputTaker {
         return scanner.nextInt();
     }
 
+    public double getDoubleInputWithMessage(String message) {
+        System.out.println(message);
+        return scanner.nextDouble();
+    }
+
     public String getStringInputWithMessage(String message) {
         System.out.println(message);
         return scanner.next();

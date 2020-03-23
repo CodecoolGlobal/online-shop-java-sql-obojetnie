@@ -39,13 +39,8 @@ public class AdminMenu {
             Option option = input.getOptionInt();
             switch (option) {
                 case ONE:
-                    String productName = input.getStringInputWithMessage("Enter a product name: ");
-                    double productPrice = input.getIntinputWithMessage("Enter price of product: ");
-                    int productQuantity = input.getIntinputWithMessage("Enter quantity of product: ");
-                    String productCategory = input.getStringInputWithMessage("Enter product Category: ");
-                    Category category = new Category(productCategory);
+                    addProduct();
 
-                    Product createdProduct = new Product(productName, productPrice, productQuantity, category);
                     break;
                 case TWO:
                     String createdCategory = input.getStringInputWithMessage("Enter name of new product category: ");
@@ -112,6 +107,14 @@ public class AdminMenu {
     }
 
     public void addProduct() {
+
+        String productName = input.getStringInputWithMessage("Enter a product name: ");
+        double productPrice = input.getDoubleInputWithMessage("Enter price of product: ");
+        int productQuantity = input.getIntinputWithMessage("Enter quantity of product: ");
+        String productCategory = input.getStringInputWithMessage("Enter product Category: ");
+        Category category = new Category(productCategory);
+
+        sqlController.getProductController().addProduct(new Product(productName, productPrice, productQuantity, category));
 
     }
 
