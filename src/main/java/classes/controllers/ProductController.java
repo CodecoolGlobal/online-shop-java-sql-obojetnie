@@ -121,7 +121,7 @@ public class ProductController {
 
         final String UPDATE_SQL = "UPDATE products " +
                 "SET price = ? " +
-                "WHERE name = ?;";
+                " WHERE name = ?;";
 
         PreparedStatement ps = null;
 
