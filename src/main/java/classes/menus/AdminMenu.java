@@ -7,8 +7,10 @@ import classes.controllers.ProductController;
 import classes.controllers.SqlController;
 import classes.enums.Option;
 import classes.inputs.InputTaker;
+import classes.menus.exceptions.AvailabilityException;
 import classes.models.Product;
 
+import java.sql.SQLException;
 import java.util.Locale;
 
 
@@ -18,7 +20,7 @@ public class AdminMenu {
     SqlController sqlController;
     InputTaker input;
 
-    public AdminMenu() throws Exception {
+    public AdminMenu() throws Exception, AvailabilityException {
         sqlConnector = new SqlConnector();
         sqlConnector.connectToDatabase();
         sqlController = new SqlController(sqlConnector);
@@ -26,7 +28,7 @@ public class AdminMenu {
         displayAdminMenu();
     }
 
-    public void displayAdminMenu() throws Exception {
+    public void displayAdminMenu() throws Exception, AvailabilityException {
         boolean isRunning = true;
         System.out.println("You are logged as admin");
         while (isRunning) {
@@ -157,8 +159,21 @@ public class AdminMenu {
         }
     }
 
-    private void deactivateProduct() {
+    private void deactivateProduct() throws SQLException, AvailabilityException {
+        ProductController productController = sqlController.getProductController();
+        productController.viewProductsTable();
+        int productId = input.getIntInputWithMessage("Enter id of product you want to edit: ");
+        Product product = productController.getProductFromDatabaseById(productId);
 
+        int availability = switch (input.getIntInputWithMessage("""
+        Choose availability:
+        (1) Available
+        (0) Not available""")) {
+            case 1 -> 1;
+            case 0 -> 0;
+            default -> throw new AvailabilityException("Non existing availability case");
+        };
+        productController.updateAvailability(product, availability);
     }
 
 
