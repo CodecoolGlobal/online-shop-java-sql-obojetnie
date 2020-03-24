@@ -11,6 +11,7 @@ import classes.menus.exceptions.AvailabilityException;
 import classes.menus.exceptions.OptionEnumException;
 import classes.models.Product;
 import classes.users.Admin;
+import classes.users.Customer;
 import classes.users.User;
 
 import java.sql.SQLException;
@@ -18,17 +19,6 @@ import java.sql.SQLException;
 
 public class AdminMenu {
 
-<<<<<<< Updated upstream
-    SqlConnector sqlConnector;
-    SqlController sqlController;
-    InputTaker input;
-
-    public AdminMenu() throws Exception, AvailabilityException, OptionEnumException {
-        sqlConnector = new SqlConnector();
-        sqlConnector.connectToDatabase();
-        sqlController = new SqlController(sqlConnector);
-        input = new InputTaker();
-=======
     private SqlConnector sqlConnector;
     private SqlController sqlController;
     private InputTaker input;
@@ -40,8 +30,6 @@ public class AdminMenu {
         this.sqlController = new SqlController(sqlConnector);
         this.input = new InputTaker();
         this.admin = (Admin) user;
->>>>>>> Stashed changes
-        displayAdminMenu();
     }
 
     public void displayAdminMenu() throws Exception, AvailabilityException, OptionEnumException {
