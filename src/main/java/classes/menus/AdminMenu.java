@@ -79,16 +79,19 @@ public class AdminMenu {
     public void deleteCategory() {
         CategoryController categoryController = sqlController.getCategoryController();
         categoryController.viewCategoriesTable();
-        int idOfCategoryToDelete = input.getIntInputWithMessage("Enter id of category you want to delete: ");
-        categoryController.deleteCategory(idOfCategoryToDelete);
+        int id = input.getIntInputWithMessage("Enter id of category you want to delete: ");
+        categoryController.deleteCategory(id);
     }
 
     public void editCategory() {
-
+        CategoryController categoryController = sqlController.getCategoryController();
+        categoryController.viewCategoriesTable();
+        int idOfCategoryToDelete = input.getIntInputWithMessage("Enter id of category you want to edit: ");
+        String newName = input.getStringInputWithMessage("Enter new name: ");
+        categoryController.editCategoryNameById(idOfCategoryToDelete, newName);
     }
 
     public void addProduct() {
-
         String productName = input.getStringInputWithMessage("Enter a product name: ");
         double productPrice = input.getDoubleInputWithMessage("Enter price of product: ");
         int productQuantity = input.getIntInputWithMessage("Enter quantity of product: ");
@@ -96,11 +99,13 @@ public class AdminMenu {
         Category category = new Category(productCategory);
 
         sqlController.getProductController().addProduct(new Product(productName, productPrice, productQuantity, category));
-
     }
 
-    public void deleteProduct() {
-
+    public void deleteProduct() throws SQLException {
+        ProductController productController = sqlController.getProductController();
+        productController.viewProductsTable();
+        int id = input.getIntInputWithMessage("Enter id of category you want to delete: ");
+        productController.deleteProduct(id);
     }
 
     public void editProduct() throws Exception {
@@ -170,9 +175,6 @@ public class AdminMenu {
         };
         productController.updateAvailability(product, availability);
     }
-
-
-
 
     public void checkOngoingOrders() {
 
