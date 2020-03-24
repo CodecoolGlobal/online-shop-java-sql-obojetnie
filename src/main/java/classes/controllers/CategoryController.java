@@ -86,6 +86,20 @@ public class CategoryController {
         return false;
     }
 
+    public void deleteCategory(int id) {
+        final String DELETE_SQL = "DELETE FROM categories WHERE id = ?;";
+
+        PreparedStatement ps = null;
+
+        try {
+            ps = this.c.prepareStatement(DELETE_SQL);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public Connection getC() {
         return c;
     }

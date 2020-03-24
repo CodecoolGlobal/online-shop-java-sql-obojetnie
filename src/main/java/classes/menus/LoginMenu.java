@@ -7,6 +7,7 @@ import classes.enums.Option;
 import classes.enums.Role;
 import classes.inputs.InputTaker;
 import classes.menus.exceptions.AvailabilityException;
+import classes.menus.exceptions.OptionEnumException;
 import classes.users.Customer;
 
 import java.util.regex.Matcher;
@@ -25,7 +26,7 @@ public class LoginMenu {
         input = new InputTaker();
     }
 
-    public void displayLoginMenu() throws Exception, AvailabilityException {
+    public void displayLoginMenu() throws Exception, AvailabilityException, OptionEnumException {
         boolean isRunning = true;
         System.out.println("Welcome to the Online Shop!");
         while (isRunning) {
@@ -135,7 +136,7 @@ public class LoginMenu {
         }
     }
 
-    private void login() throws Exception, AvailabilityException {
+    private void login() throws Exception, AvailabilityException, OptionEnumException {
         UserController userController = sqlController.getUserController();
         String loginInput = getLoginFromUser(userController);
         checkIfPasswordMatches(userController, loginInput);
