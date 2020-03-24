@@ -117,7 +117,6 @@ public class CustomerMenu {
     private void rateItem() {
 
     }
-
     private void getOrdersStatistics() {
 
     }
