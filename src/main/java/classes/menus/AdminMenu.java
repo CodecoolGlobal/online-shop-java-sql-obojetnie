@@ -1,7 +1,7 @@
 package classes.menus;
 
-import classes.connectors.SqlConnector;
 import classes.categories.Category;
+import classes.connectors.SqlConnector;
 import classes.controllers.CategoryController;
 import classes.controllers.ProductController;
 import classes.controllers.SqlController;
@@ -11,11 +11,9 @@ import classes.menus.exceptions.AvailabilityException;
 import classes.menus.exceptions.OptionEnumException;
 import classes.models.Product;
 import classes.users.Admin;
-import classes.users.Customer;
 import classes.users.User;
 
 import java.sql.SQLException;
-
 
 public class AdminMenu {
 
@@ -30,6 +28,7 @@ public class AdminMenu {
         this.sqlController = new SqlController(sqlConnector);
         this.input = new InputTaker();
         this.admin = (Admin) user;
+        displayAdminMenu();
     }
 
     public void displayAdminMenu() throws Exception, AvailabilityException, OptionEnumException {

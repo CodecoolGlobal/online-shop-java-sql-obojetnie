@@ -83,13 +83,14 @@ public class CustomerMenu {
         Product product = productController.getProductFromDatabaseById(id);
         int quantity = input.getIntInputWithMessage("Insert quantity: ");
         customer.getBasket().addProduct(product, quantity);
+        checkBasket();
     }
 
     private void deleteItemFromBasket() {
     }
 
     private void checkBasket() {
-
+        customer.getBasket().viewBasket();
     }
 
     private void placeOrder() {

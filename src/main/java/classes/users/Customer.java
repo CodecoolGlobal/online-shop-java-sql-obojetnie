@@ -2,6 +2,7 @@ package classes.users;
 
 import classes.enums.Role;
 import classes.models.Basket;
+import classes.models.Product;
 
 public class Customer extends User {
 
@@ -15,5 +16,6 @@ public class Customer extends User {
     public Basket getBasket() {
         return this.basket;
     }
+
 
 }
