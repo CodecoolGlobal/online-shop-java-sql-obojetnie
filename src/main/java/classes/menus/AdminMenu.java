@@ -2,13 +2,14 @@ package classes.menus;
 
 import classes.connectors.SqlConnector;
 import classes.categories.Category;
+import classes.controllers.CategoryController;
 import classes.controllers.ProductController;
 import classes.controllers.SqlController;
 import classes.enums.Option;
 import classes.inputs.InputTaker;
 import classes.models.Product;
 
-import java.sql.SQLException;
+import java.util.Locale;
 
 
 public class AdminMenu {
@@ -33,11 +34,10 @@ public class AdminMenu {
                     (1) Create new product
                     (2) Create new product category
                     (3) Edit product
-                    (4) Edit product category name
-                    (5) Deactivate product
-                    (6) Collect feedback from users
-                    (7) See statistics of user feedbacks
-                    (8) See list of ongoing orders
+                    (4) Deactivate product
+                    (5) Collect feedback from users
+                    (6) See statistics of user feedbacks
+                    (7) See list of ongoing orders
                     (0) Quit""");
             Option option = input.getOptionInt();
             switch (option) {
@@ -51,8 +51,7 @@ public class AdminMenu {
                     editProduct();
                     break;
                 case FOUR:
-                    String editCategoryName = input.getStringInputWithMessage("Which category name do you want to edit?");
-                    System.out.println("Changing category name");
+                    deactivateProduct();
                     break;
                 case FIVE:
                     //there will be list of products
@@ -95,7 +94,7 @@ public class AdminMenu {
 
         String productName = input.getStringInputWithMessage("Enter a product name: ");
         double productPrice = input.getDoubleInputWithMessage("Enter price of product: ");
-        int productQuantity = input.getIntinputWithMessage("Enter quantity of product: ");
+        int productQuantity = input.getIntInputWithMessage("Enter quantity of product: ");
         String productCategory = input.getStringInputWithMessage("Enter product Category: ");
         Category category = new Category(productCategory);
 
@@ -111,14 +110,13 @@ public class AdminMenu {
         Option option;
         ProductController productController = sqlController.getProductController();
         productController.viewProductsTable();
-        String productName = input.getStringInputWithMessage("Enter name of product you want to edit: ");
-
-        Product productToEdit = productController.getProductFromDatabase(productName);
+        int productId = input.getIntInputWithMessage("Enter id of product you want to edit: ");
+        Product productToEdit = productController.getProductFromDatabaseById(productId);
         System.out.println("""
-                            (1) Product name
-                            (2) Product price
-                            (3) Product quantity
-                            (4) Product category""");
+                (1) Product name
+                (2) Product price
+                (3) Product quantity
+                (4) Product category""");
         option = input.getOptionIntWithMessage("What do you want to edit?");
 
         switch (option) {
@@ -132,16 +130,37 @@ public class AdminMenu {
                 productController.editProductPrice(productToEdit, newPrice);
                 break;
             case THREE:
-                int newQuantity = input.getIntinputWithMessage("Enter new quantity of product: ");
-                productController.editProductQuantity(productToEdit, newQuantity);
+                int editOrUpdate = input.getIntInputWithMessage("""
+                        Do you want to edit or add quantity?
+                        (1) Edit
+                        (2) Add""");
+                switch (editOrUpdate) {
+                    case 1 -> {
+                        int newQuantity = input.getIntInputWithMessage("Enter new quantity of product: ");
+                        productController.editProductQuantity(productToEdit, newQuantity);
+                    }
+                    case 2 -> {
+                        int addon = input.getIntInputWithMessage("Enter amount to add: ");
+                        productController.updateQuantity(productToEdit, addon);
+                    }
+                }
+
                 break;
             case FOUR:
-                String newCategory = input.getStringInputWithMessage("Enter new category of product: ");
+                CategoryController categoryController = new CategoryController(sqlConnector);
+                categoryController.viewCategoriesTable();
+                int newCategory = input.getIntInputWithMessage("Enter id of new category: ");
+                productController.editProductCategory(productToEdit, newCategory);
                 break;
             default:
                 throw new Exception("Something went wrong.");
         }
     }
+
+    private void deactivateProduct() {
+
+    }
+
 
     public void checkOngoingOrders() {
 
