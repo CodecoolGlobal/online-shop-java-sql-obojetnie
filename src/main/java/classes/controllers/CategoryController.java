@@ -36,6 +36,7 @@ public class CategoryController {
         final String INSERT_SQL = "INSERT INTO categories (name)" +
                 "VALUES (?);";
 
+
         String name = category.getName();
 
         PreparedStatement ps = null;
