@@ -19,4 +19,13 @@ public class Basket {
         basket.remove(product);
     }
 
+    public Product getProduct(String name) {
+        for (Product product : basket.keySet()) {
+            if (product.getName().equals(name)) {
+                return product;
+            }
+        }
+        return null;
+    }
+
 }

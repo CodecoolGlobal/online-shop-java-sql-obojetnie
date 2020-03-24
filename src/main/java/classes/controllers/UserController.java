@@ -1,7 +1,10 @@
 package classes.controllers;
 
 import classes.connectors.SqlConnector;
+import classes.controllers.exceptions.IdRoleException;
 import classes.enums.Role;
+import classes.users.Admin;
+import classes.users.Customer;
 import classes.users.User;
 
 import java.sql.*;
@@ -131,6 +134,33 @@ public class UserController {
             e.printStackTrace();
         }
         return idRole;
+    }
+
+    public User loginUser(String login, String password) throws SQLException {
+        String query = "SELECT * FROM users WHERE login = '" + login + "' AND password = '" + password + "';";
+
+        try {
+            ResultSet rs = st.executeQuery(query);
+            while (rs.next()) {
+                int id = rs.getInt("Id");
+                String email = rs.getString("Email");
+                int roleId = rs.getInt("IdRole");
+                String role;
+                switch (roleId) {
+                    case 1:
+                        Admin admin = new Admin(login, password, email, Role.ADMIN);
+                        return admin;
+                    case 2:
+                        Customer customer = new Customer(login, password, email, Role.CUSTOMER);
+                        return customer;
+                    default:
+                        throw new IdRoleException("No matching role id");
+                }
+            }
+        } catch (Exception | IdRoleException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public Connection getC() {
