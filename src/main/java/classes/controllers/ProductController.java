@@ -154,6 +154,7 @@ public class ProductController {
         }
     }
 
+
     public Product getProductFromDatabase(String name) {
         String SELECT_SQL = "SELECT * FROM products WHERE name = '" + name + "';";
         try {
