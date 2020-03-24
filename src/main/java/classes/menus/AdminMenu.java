@@ -10,12 +10,15 @@ import classes.inputs.InputTaker;
 import classes.menus.exceptions.AvailabilityException;
 import classes.menus.exceptions.OptionEnumException;
 import classes.models.Product;
+import classes.users.Admin;
+import classes.users.User;
 
 import java.sql.SQLException;
 
 
 public class AdminMenu {
 
+<<<<<<< Updated upstream
     SqlConnector sqlConnector;
     SqlController sqlController;
     InputTaker input;
@@ -25,6 +28,19 @@ public class AdminMenu {
         sqlConnector.connectToDatabase();
         sqlController = new SqlController(sqlConnector);
         input = new InputTaker();
+=======
+    private SqlConnector sqlConnector;
+    private SqlController sqlController;
+    private InputTaker input;
+    private Admin admin;
+
+    public AdminMenu(User user) throws Exception, AvailabilityException, OptionEnumException {
+        this.sqlConnector = new SqlConnector();
+        this.sqlConnector.connectToDatabase();
+        this.sqlController = new SqlController(sqlConnector);
+        this.input = new InputTaker();
+        this.admin = (Admin) user;
+>>>>>>> Stashed changes
         displayAdminMenu();
     }
 
