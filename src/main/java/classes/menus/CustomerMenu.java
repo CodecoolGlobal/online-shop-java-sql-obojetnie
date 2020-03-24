@@ -1,21 +1,29 @@
 package classes.menus;
 
 import classes.connectors.SqlConnector;
+import classes.controllers.ProductController;
 import classes.controllers.SqlController;
 import classes.enums.Option;
 import classes.inputs.InputTaker;
+import classes.models.Product;
+import classes.users.Customer;
+import classes.users.User;
+
+import java.sql.SQLException;
 
 public class CustomerMenu {
 
-    SqlConnector sqlConnector;
-    SqlController sqlController;
-    InputTaker input;
+    private SqlConnector sqlConnector;
+    private SqlController sqlController;
+    private InputTaker input;
+    private Customer customer;
 
-    public CustomerMenu() throws Exception {
-        sqlConnector = new SqlConnector();
-        sqlConnector.connectToDatabase();
-        sqlController = new SqlController(sqlConnector);
-        input = new InputTaker();
+    public CustomerMenu(User user) throws Exception {
+        this.sqlConnector = new SqlConnector();
+        this.sqlConnector.connectToDatabase();
+        this.sqlController = new SqlController(sqlConnector);
+        this.input = new InputTaker();
+        this.customer = (Customer) user;
         displayCustomerMenu();
     }
 
@@ -38,6 +46,7 @@ public class CustomerMenu {
             Option option = input.getOptionInt();
             switch (option) {
                 case ONE:
+                    addItemToBasket();
                     break;
                 case TWO:
                     break;
@@ -68,8 +77,12 @@ public class CustomerMenu {
         }
     }
 
-    private void addItemToBasket() {
-
+    private void addItemToBasket() throws SQLException {
+        ProductController productController = sqlController.getProductController();
+        int id = input.getIntInputWithMessage("Insert id of product you want to put into basket: ");
+        Product product = productController.getProductFromDatabaseById(id);
+        int quantity = input.getIntInputWithMessage("Insert quantity: ");
+        customer.getBasket().addProduct(product, quantity);
     }
 
     private void deleteItemFromBasket() {
@@ -87,8 +100,9 @@ public class CustomerMenu {
 
     }
 
-    private void viewListOfAvailableProducts() {
-
+    private void viewListOfAvailableProducts() throws SQLException {
+        ProductController productController = sqlController.getProductController();
+        productController.viewProductsTable();
     }
 
     private void viewProductsInCategory() {

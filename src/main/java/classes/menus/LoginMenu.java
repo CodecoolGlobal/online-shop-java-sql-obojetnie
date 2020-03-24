@@ -7,21 +7,22 @@ import classes.enums.Option;
 import classes.enums.Role;
 import classes.inputs.InputTaker;
 import classes.users.Customer;
+import classes.users.User;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LoginMenu {
 
-    SqlConnector sqlConnector;
-    SqlController sqlController;
-    InputTaker input;
+    private SqlConnector sqlConnector;
+    private SqlController sqlController;
+    private InputTaker input;
 
     public LoginMenu() {
-        sqlConnector = new SqlConnector();
-        sqlConnector.connectToDatabase();
-        sqlController = new SqlController(sqlConnector);
-        input = new InputTaker();
+        this.sqlConnector = new SqlConnector();
+        this.sqlConnector.connectToDatabase();
+        this.sqlController = new SqlController(sqlConnector);
+        this.input = new InputTaker();
     }
 
     public void displayLoginMenu() throws Exception {
@@ -121,7 +122,7 @@ public class LoginMenu {
         return loginInput;
     }
 
-    private void checkIfPasswordMatches(UserController userController, String loginInput) {
+    private String checkIfPasswordMatches(UserController userController, String loginInput) {
         String passwordInput = "";
         boolean isPasswordValid = false;
         while (!isPasswordValid) {
@@ -132,16 +133,18 @@ public class LoginMenu {
                 System.out.println("Invalid password");
             }
         }
+        return passwordInput;
     }
 
     private void login() throws Exception {
         UserController userController = sqlController.getUserController();
         String loginInput = getLoginFromUser(userController);
-        checkIfPasswordMatches(userController, loginInput);
-        int idRole = userController.getIdRole(loginInput);
-        switch (idRole) {
-            case 1 -> new AdminMenu();
-            case 2 -> new CustomerMenu();
+        String passwordInput = checkIfPasswordMatches(userController, loginInput);
+        User user = userController.loginUser(loginInput, passwordInput);
+        Role role = user.getRole();
+        switch (role) {
+            case ADMIN -> new AdminMenu(user);
+            case CUSTOMER -> new CustomerMenu(user);
             default -> throw new Exception("Something went wrong.");
         }
     }
