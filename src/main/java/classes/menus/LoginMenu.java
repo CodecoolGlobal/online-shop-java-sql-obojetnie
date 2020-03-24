@@ -6,6 +6,8 @@ import classes.controllers.UserController;
 import classes.enums.Option;
 import classes.enums.Role;
 import classes.inputs.InputTaker;
+import classes.menus.exceptions.AvailabilityException;
+import classes.menus.exceptions.OptionEnumException;
 import classes.users.Customer;
 import classes.users.User;
 
@@ -25,7 +27,7 @@ public class LoginMenu {
         this.input = new InputTaker();
     }
 
-    public void displayLoginMenu() throws Exception {
+    public void displayLoginMenu() throws Exception, AvailabilityException, OptionEnumException {
         boolean isRunning = true;
         System.out.println("Welcome to the Online Shop!");
         while (isRunning) {
@@ -136,7 +138,7 @@ public class LoginMenu {
         return passwordInput;
     }
 
-    private void login() throws Exception {
+    private void login() throws Exception, AvailabilityException, OptionEnumException {
         UserController userController = sqlController.getUserController();
         String loginInput = getLoginFromUser(userController);
         String passwordInput = checkIfPasswordMatches(userController, loginInput);

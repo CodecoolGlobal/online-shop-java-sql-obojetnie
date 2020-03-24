@@ -7,11 +7,13 @@ import classes.controllers.ProductController;
 import classes.controllers.SqlController;
 import classes.enums.Option;
 import classes.inputs.InputTaker;
+import classes.menus.exceptions.AvailabilityException;
+import classes.menus.exceptions.OptionEnumException;
 import classes.models.Product;
 import classes.users.Admin;
 import classes.users.User;
 
-import java.util.Locale;
+import java.sql.SQLException;
 
 
 public class AdminMenu {
@@ -21,7 +23,7 @@ public class AdminMenu {
     SqlController sqlController;
     InputTaker input;
 
-    public AdminMenu() throws Exception {
+    public AdminMenu() throws Exception, AvailabilityException, OptionEnumException {
         sqlConnector = new SqlConnector();
         sqlConnector.connectToDatabase();
         sqlController = new SqlController(sqlConnector);
@@ -42,7 +44,7 @@ public class AdminMenu {
         displayAdminMenu();
     }
 
-    public void displayAdminMenu() throws Exception {
+    public void displayAdminMenu() throws Exception, AvailabilityException, OptionEnumException {
         boolean isRunning = true;
         System.out.println("You are logged as admin");
         while (isRunning) {
@@ -51,9 +53,9 @@ public class AdminMenu {
                     (2) Create new product category
                     (3) Edit product
                     (4) Deactivate product
-                    (5) Collect feedback from users
-                    (6) See statistics of user feedbacks
-                    (7) See list of ongoing orders
+                    (5) Delete category
+                    (6) Edit category
+                    (7) Delete product
                     (0) Quit""");
             Option option = input.getOptionInt();
             switch (option) {
@@ -70,24 +72,16 @@ public class AdminMenu {
                     deactivateProduct();
                     break;
                 case FIVE:
-                    //there will be list of products
-                    String deactivatedProduct = input.getStringInputWithMessage("Which product do you want to deactivate?");
+                    deleteCategory();
                     break;
                 case SIX:
-                    //collecting User rates of products
-                    System.out.println("Collect feedback");
+                    editCategory();
                     break;
                 case SEVEN:
-                    // table with statistics
-                    System.out.println("Statistics from users");
+                    deleteProduct();
                     break;
-                case EIGHT:
-                    //table with ongoing orders
-                    System.out.println("List of ongoing orders");
-                case NINE:
-                    isRunning = false;
                 default:
-                    throw new Exception("Something went wrong.");
+                    throw new OptionEnumException("No such field in OptionEnum");
             }
         }
     }
@@ -99,15 +93,21 @@ public class AdminMenu {
     }
 
     public void deleteCategory() {
-
+        CategoryController categoryController = sqlController.getCategoryController();
+        categoryController.viewCategoriesTable();
+        int id = input.getIntInputWithMessage("Enter id of category you want to delete: ");
+        categoryController.deleteCategory(id);
     }
 
     public void editCategory() {
-
+        CategoryController categoryController = sqlController.getCategoryController();
+        categoryController.viewCategoriesTable();
+        int idOfCategoryToDelete = input.getIntInputWithMessage("Enter id of category you want to edit: ");
+        String newName = input.getStringInputWithMessage("Enter new name: ");
+        categoryController.editCategoryNameById(idOfCategoryToDelete, newName);
     }
 
     public void addProduct() {
-
         String productName = input.getStringInputWithMessage("Enter a product name: ");
         double productPrice = input.getDoubleInputWithMessage("Enter price of product: ");
         int productQuantity = input.getIntInputWithMessage("Enter quantity of product: ");
@@ -115,11 +115,13 @@ public class AdminMenu {
         Category category = new Category(productCategory);
 
         sqlController.getProductController().addProduct(new Product(productName, productPrice, productQuantity, category));
-
     }
 
-    public void deleteProduct() {
-
+    public void deleteProduct() throws SQLException {
+        ProductController productController = sqlController.getProductController();
+        productController.viewProductsTable();
+        int id = input.getIntInputWithMessage("Enter id of category you want to delete: ");
+        productController.deleteProduct(id);
     }
 
     public void editProduct() throws Exception {
@@ -173,10 +175,22 @@ public class AdminMenu {
         }
     }
 
-    private void deactivateProduct() {
+    private void deactivateProduct() throws SQLException, AvailabilityException {
+        ProductController productController = sqlController.getProductController();
+        productController.viewProductsTable();
+        int productId = input.getIntInputWithMessage("Enter id of product you want to edit: ");
+        Product product = productController.getProductFromDatabaseById(productId);
 
+        int availability = switch (input.getIntInputWithMessage("""
+        Choose availability:
+        (1) Available
+        (0) Not available""")) {
+            case 1 -> 1;
+            case 0 -> 0;
+            default -> throw new AvailabilityException("Non existing availability case");
+        };
+        productController.updateAvailability(product, availability);
     }
-
 
     public void checkOngoingOrders() {
 
