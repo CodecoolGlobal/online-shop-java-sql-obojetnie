@@ -8,9 +8,8 @@ public class Customer extends User {
 
     private Basket basket;
 
-    public Customer(String login, String password, String email, Role role) {
-        super(login, password, email, role);
-        this.basket = new Basket();
+    public Customer(int id, String login, String password, String email, Role role) {
+        super(id, login, password, email, role);
     }
 
     public Basket getBasket() {

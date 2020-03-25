@@ -5,6 +5,7 @@ import classes.controllers.ProductController;
 import classes.controllers.SqlController;
 import classes.enums.Option;
 import classes.inputs.InputTaker;
+import classes.menus.exceptions.OptionEnumException;
 import classes.models.Basket;
 import classes.models.Product;
 import classes.users.Customer;
@@ -20,7 +21,7 @@ public class CustomerMenu {
     private InputTaker input;
     private Customer customer;
 
-    public CustomerMenu(User user) throws Exception {
+    public CustomerMenu(User user) throws Exception, OptionEnumException {
         this.sqlConnector = new SqlConnector();
         this.sqlConnector.connectToDatabase();
         this.sqlController = new SqlController(sqlConnector);
@@ -29,7 +30,7 @@ public class CustomerMenu {
         displayCustomerMenu();
     }
 
-    public void displayCustomerMenu() throws Exception {
+    public void displayCustomerMenu() throws Exception, OptionEnumException {
         boolean isRunning = true;
         System.out.println("You are logged as customer");
         while (isRunning) {
@@ -56,8 +57,7 @@ public class CustomerMenu {
                     checkBasket();
                     break;
                 case FOUR:
-                    ;
-                    placeOrder();
+                    placeOrderMenu();
                     break;
                 case FIVE:
                     ordersHistory();
@@ -105,6 +105,22 @@ public class CustomerMenu {
 
     private void checkBasket() {
         customer.getBasket().viewBasket();
+    }
+
+    private void placeOrderMenu() throws Exception, OptionEnumException {
+        customer.getBasket().viewBasket();
+        Option option = input.getOptionIntWithMessage("""
+                Do you want to place order?
+                (1) Yes
+                (0) No
+                """);
+
+        switch (option) {
+            case ONE -> placeOrder();
+            case ZERO -> System.out.println();
+            default -> throw new OptionEnumException("No such option");
+        }
+
     }
 
     private void placeOrder() {

@@ -99,14 +99,15 @@ public class LoginMenu {
 
     private void createAccount() throws Exception {
         UserController userController = sqlController.getUserController();
+        int id = 0;
         String login = createCustomerLogin(userController);
         String password = createCustomerPassword();
         String email = createCustomerEmail(userController);
 
         try {
-            userController.addUser(new Customer(login, password, email, Role.CUSTOMER));
+            userController.addUser(new Customer(id, login, password, email, Role.CUSTOMER));
         } catch (Exception e) {
-            throw new Exception("Something went wrong");
+            throw new Exception("Create account in LoginMenu error");
         }
     }
 
