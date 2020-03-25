@@ -16,6 +16,7 @@ public class Basket {
     }
 
     public void addProduct(Product product, int quantity) {
+        product.setPrice(product.getPrice() * quantity);
         basket.put(product, quantity);
     }
 

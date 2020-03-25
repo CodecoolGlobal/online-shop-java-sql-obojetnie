@@ -1,6 +1,7 @@
 package classes.menus;
 
 import classes.connectors.SqlConnector;
+import classes.controllers.OrderController;
 import classes.controllers.ProductController;
 import classes.controllers.SqlController;
 import classes.enums.Option;
@@ -124,7 +125,8 @@ public class CustomerMenu {
     }
 
     private void placeOrder() {
-
+        OrderController orderController = sqlController.getOrderController();
+        orderController.addOrder(customer);
     }
 
     private void ordersHistory() {

@@ -2,7 +2,6 @@ package classes.users;
 
 import classes.enums.Role;
 import classes.models.Basket;
-import classes.models.Product;
 
 public class Customer extends User {
 
@@ -10,6 +9,7 @@ public class Customer extends User {
 
     public Customer(int id, String login, String password, String email, Role role) {
         super(id, login, password, email, role);
+        basket = new Basket();
     }
 
     public Basket getBasket() {

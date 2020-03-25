@@ -10,11 +10,13 @@ public class SqlController {
     private CategoryController categoryController;
     private ProductController productController;
     private UserController userController;
+    private OrderController orderController;
 
     public SqlController(SqlConnector sqlConnector) {
-        categoryController = new CategoryController(sqlConnector);
-        productController = new ProductController(sqlConnector);
-        userController = new UserController(sqlConnector);
+        this.categoryController = new CategoryController(sqlConnector);
+        this.productController = new ProductController(sqlConnector);
+        this.userController = new UserController(sqlConnector);
+        this.orderController = new OrderController(sqlConnector);
         this.sqlConnector = sqlConnector;
     }
 
@@ -30,6 +32,10 @@ public class SqlController {
         return userController;
     }
 
+    public OrderController getOrderController() {
+        return orderController;
+    }
+
     public SqlConnector getSqlConnector() {
         return sqlConnector;
     }
@@ -41,6 +47,8 @@ public class SqlController {
         getUserController().getSt().close();
         getProductController().getC().close();
         getProductController().getSt().close();
+        getOrderController().getC().close();
+        getOrderController().getSt().close();
         sqlConnector.disconnectFromDatabase();
     }
 }
