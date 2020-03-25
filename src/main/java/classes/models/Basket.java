@@ -11,6 +11,10 @@ public class Basket {
         basket = new HashMap<>();
     }
 
+    public Map<Product, Integer> getBasketMap() {
+        return basket;
+    }
+
     public void addProduct(Product product, int quantity) {
         basket.put(product, quantity);
     }
@@ -20,15 +24,17 @@ public class Basket {
     }
 
     public void viewBasket() {
-        String format = "|%1$-18s|%2$-5s|%3$-4s|%4$-5s|\n";
+        String format = "|%1$-3s|%2$-18s|%3$-5s|%4$-4s|%5$-5s|\n";
+        int i = 1;
 
         for (Product product : basket.keySet()) {
             String name = product.getName();
             double price = product.getPrice();
-            int quantity = product.getQuantity();
+            int quantity = basket.get(product);
             double rate = product.getRate();
 
-            System.out.printf(format, name, price, quantity, rate);
+            System.out.printf(format, i, name, price, quantity, rate);
+            i++;
         }
     }
 
@@ -40,5 +46,6 @@ public class Basket {
         }
         return null;
     }
+
 
 }

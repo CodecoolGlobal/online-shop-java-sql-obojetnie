@@ -1,8 +1,10 @@
 package classes.controllers;
 
+import classes.categories.Category;
 import classes.connectors.SqlConnector;
 import classes.controllers.exceptions.IdRoleException;
 import classes.enums.Role;
+import classes.models.Product;
 import classes.users.Admin;
 import classes.users.Customer;
 import classes.users.User;
@@ -17,6 +19,31 @@ public class UserController {
     public UserController(SqlConnector sqlConnector) {
         this.c = sqlConnector.getC();
         this.st = sqlConnector.getSt();
+    }
+
+    public User getUserFromDatabaseById(int id) throws Exception {
+        String SELECT_SQL = "SELECT * FROM users WHERE id = '" + id + "';";
+        try {
+            ResultSet rs = st.executeQuery(SELECT_SQL);
+            while (rs.next()) {
+                String login = rs.getString("Login");
+                String password = rs.getString("Password");
+                String email = rs.getString("Email");
+                int idRole = (rs.getInt("IdRole"));
+                switch (idRole) {
+                    case 1 -> {
+                        return new Admin(id, login, password, email, Role.ADMIN);
+                    }
+                    case 2 -> {
+                        return new Customer(id, login, password, email, Role.CUSTOMER);
+                    }
+                    default -> throw new IdRoleException("No matching role id");
+                }
+            }
+        } catch (SQLException | IdRoleException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void viewUsersTable() throws SQLException {
@@ -145,16 +172,14 @@ public class UserController {
                 int id = rs.getInt("Id");
                 String email = rs.getString("Email");
                 int roleId = rs.getInt("IdRole");
-                String role;
                 switch (roleId) {
-                    case 1:
-                        Admin admin = new Admin(login, password, email, Role.ADMIN);
-                        return admin;
-                    case 2:
-                        Customer customer = new Customer(login, password, email, Role.CUSTOMER);
-                        return customer;
-                    default:
-                        throw new IdRoleException("No matching role id");
+                    case 1 -> {
+                        return new Admin(id, login, password, email, Role.ADMIN);
+                    }
+                    case 2 -> {
+                        return new Customer(id, login, password, email, Role.CUSTOMER);
+                    }
+                    default -> throw new IdRoleException("No matching role id");
                 }
             }
         } catch (Exception | IdRoleException e) {
