@@ -1,7 +1,14 @@
 package classes.menus;
 
 import classes.connectors.SqlConnector;
+<<<<<<< Updated upstream
 import classes.controllers.*;
+=======
+import classes.controllers.CategoryController;
+import classes.controllers.OrderController;
+import classes.controllers.ProductController;
+import classes.controllers.SqlController;
+>>>>>>> Stashed changes
 import classes.enums.Option;
 import classes.inputs.InputTaker;
 import classes.menus.exceptions.OptionEnumException;
@@ -34,7 +41,7 @@ public class CustomerMenu {
         boolean isRunning = true;
         System.out.println("You are logged as customer");
         while (isRunning) {
-            viewListOfAvailableProducts();
+            //viewListOfAvailableProducts();
             System.out.println("""
                     (1) Add product to basket
                     (2) Delete product from basket
@@ -140,7 +147,12 @@ public class CustomerMenu {
     }
 
     private void viewProductsInCategory() {
-
+        CategoryController categoryController = sqlController.getCategoryController();
+        categoryController.viewCategoriesTable();
+        ProductController productController = sqlController.getProductController();
+        int idCategory = input.getIntInputWithMessage("Select id of category whom products you want to see: ");
+        System.out.println("Category: " + categoryController.getCategoryFromDatabaseById(idCategory).getName());
+        productController.viewAllProductsFromCategory(idCategory);
     }
 
     private void checkIfProductAvailable() {

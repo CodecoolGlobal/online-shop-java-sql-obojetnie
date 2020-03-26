@@ -41,6 +41,28 @@ public class ProductController {
         }
     }
 
+    public void viewAllProductsFromCategory(int categoryId) {
+        String SELECT_SQL = "SELECT * FROM products WHERE idcategory = '" +  categoryId + "';";
+
+        try {
+            ResultSet rs = st.executeQuery(SELECT_SQL);
+            while(rs.next()) {
+                int id = rs.getInt("Id");
+                String name = rs.getString("Name");
+                double price = rs.getDouble("Price");
+                int quantity = rs.getInt("Quantity");
+                int availability = rs.getInt("Availability");
+                int idCategory = rs.getInt("idCategory");
+                double rate = rs.getDouble("Rate");
+
+                String format = "|%1$-3s|%2$-18s|%3$-16s|%4$-30s|%5$-9s|%6$-20s|%7$-10s|\n";
+                System.out.printf(format, id, name, price, quantity, availability, idCategory, rate);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void addProduct(Product product) {
         final String INSERT_SQL = "INSERT INTO products (name, price, quantity, availability, idCategory, rate)" +
                 "VALUES (?, ?, ?, ?, ?, ?);";
@@ -280,6 +302,7 @@ public class ProductController {
             e.printStackTrace();
         }
     }
+
 
     public Connection getC() {
         return c;

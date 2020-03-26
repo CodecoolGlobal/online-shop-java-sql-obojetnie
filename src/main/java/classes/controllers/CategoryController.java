@@ -120,6 +120,7 @@ public class CategoryController {
         return null;
     }
 
+
     public void deleteCategory(int id) {
         final String DELETE_SQL = "DELETE FROM categories WHERE id = ?;";
 
