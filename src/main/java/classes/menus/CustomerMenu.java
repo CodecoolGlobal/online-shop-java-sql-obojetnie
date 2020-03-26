@@ -1,14 +1,7 @@
 package classes.menus;
 
 import classes.connectors.SqlConnector;
-<<<<<<< Updated upstream
 import classes.controllers.*;
-=======
-import classes.controllers.CategoryController;
-import classes.controllers.OrderController;
-import classes.controllers.ProductController;
-import classes.controllers.SqlController;
->>>>>>> Stashed changes
 import classes.enums.Option;
 import classes.inputs.InputTaker;
 import classes.menus.exceptions.OptionEnumException;
@@ -67,7 +60,7 @@ public class CustomerMenu {
                     placeOrder();
                     break;
                 case FIVE:
-                    ordersHistory();
+                    orderHistory();
                     break;
                 case SIX:
                     viewListOfAvailableProducts();
@@ -136,7 +129,7 @@ public class CustomerMenu {
         customer.addOrderToHistory(newOrder);
     }
 
-    private void ordersHistory() {
+    private void orderHistory() {
 
     }
 
