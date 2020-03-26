@@ -2,6 +2,7 @@ package classes.controllers;
 
 import classes.connectors.SqlConnector;
 import classes.categories.Category;
+import classes.menus.exceptions.AvailabilityException;
 import classes.models.Basket;
 import classes.models.Order;
 import classes.models.Product;
@@ -206,9 +207,7 @@ public class ProductController {
                 String name = rs.getString("Name");
                 double price = rs.getDouble("Price");
                 int quantity = rs.getInt("Quantity");
-                int availability = rs.getInt("Availability");
                 int idCategory = rs.getInt("idCategory");
-                double rate = rs.getDouble("Rate");
                 Category category = switch (idCategory) {
                     case 1 -> new Category(1, "Hygiene");
                     case 2 -> new Category(2, "Beverages");
@@ -301,6 +300,22 @@ public class ProductController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean checkAvailability(int id) {
+        final String SELECT_SQL = "SELECT availability FROM products WHERE id = '" + id + "';";
+        boolean isAvailable = false;
+        try {
+            ResultSet rs = st.executeQuery(SELECT_SQL);
+            isAvailable = switch (rs.getInt("availability")) {
+                case 1 -> true;
+                case 0 -> false;
+                default -> throw new AvailabilityException("Wrong idAvailability");
+            };
+        } catch (Exception | AvailabilityException e) {
+            e.printStackTrace();
+        }
+        return isAvailable;
     }
 
 

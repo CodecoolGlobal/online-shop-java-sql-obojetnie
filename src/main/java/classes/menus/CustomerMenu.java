@@ -34,8 +34,8 @@ public class CustomerMenu {
         boolean isRunning = true;
         System.out.println("You are logged as customer");
         while (isRunning) {
-            //viewListOfAvailableProducts();
             System.out.println("""
+
                     (1) Add product to basket
                     (2) Delete product from basket
                     (3) See all products from basket
@@ -69,12 +69,10 @@ public class CustomerMenu {
                     viewProductsInCategory();
                     break;
                 case EIGHT:
-                    checkIfProductAvailable();
+                    checkIfProductIsAvailable();
                     break;
                 case ZERO:
                     isRunning = false;
-                default:
-                    throw new Exception("Something went wrong.");
             }
         }
     }
@@ -130,7 +128,8 @@ public class CustomerMenu {
     }
 
     private void orderHistory() {
-
+        OrderController orderController = sqlController.getOrderController();
+        orderController.viewOrdersTable();
     }
 
     private void viewListOfAvailableProducts() throws SQLException {
@@ -148,8 +147,15 @@ public class CustomerMenu {
         productController.viewAllProductsFromCategory(idCategory);
     }
 
-    private void checkIfProductAvailable() {
-
+    private void checkIfProductIsAvailable() {
+        ProductController productController = sqlController.getProductController();
+        int id = input.getIntInputWithMessage("Insert id of product: ");
+        boolean isAvailable = productController.checkAvailability(id);
+        if (isAvailable) {
+            System.out.println("Available");
+        } else {
+            System.out.println("Not available");
+        }
     }
 
     private void rateItem() {
