@@ -1,10 +1,8 @@
 package classes.controllers;
 
-import classes.categories.Category;
 import classes.connectors.SqlConnector;
 import classes.controllers.exceptions.IdRoleException;
 import classes.enums.Role;
-import classes.models.Product;
 import classes.users.Admin;
 import classes.users.Customer;
 import classes.users.User;

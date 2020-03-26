@@ -1,8 +1,7 @@
 package classes.controllers;
 
-import classes.connectors.SqlConnector;
 import classes.categories.Category;
-import classes.models.Product;
+import classes.connectors.SqlConnector;
 
 import java.sql.*;
 
@@ -94,7 +93,7 @@ public class CategoryController {
 
         try {
             ResultSet rs = st.executeQuery(SELECT_SQL);
-            while (rs.next()){
+            while (rs.next()) {
                 if (rs.getString("Name").equals(name)) {
                     return true;
                 }
@@ -110,7 +109,7 @@ public class CategoryController {
 
         try {
             ResultSet rs = st.executeQuery(SELECT_SQL);
-            while (rs.next()){
+            while (rs.next()) {
                 String name = rs.getString("Name");
                 return new Category(id, name);
             }

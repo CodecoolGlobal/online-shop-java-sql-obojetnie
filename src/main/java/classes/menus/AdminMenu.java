@@ -169,9 +169,9 @@ public class AdminMenu {
         Product product = productController.getProductFromDatabaseById(productId);
 
         int availability = switch (input.getIntInputWithMessage("""
-        Choose availability:
-        (1) Available
-        (0) Not available""")) {
+                Choose availability:
+                (1) Available
+                (0) Not available""")) {
             case 1 -> 1;
             case 0 -> 0;
             default -> throw new AvailabilityException("Non existing availability case");
