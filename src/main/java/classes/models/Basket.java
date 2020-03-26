@@ -1,6 +1,9 @@
 package classes.models;
 
-import java.util.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Basket {
 
@@ -16,7 +19,8 @@ public class Basket {
     }
 
     public void addProduct(Product product, int quantity) {
-        product.setPrice(product.getPrice() * quantity);
+        double price = round(product.getPrice() * quantity, 2);
+        product.setPrice(price);
         basket.put(product, quantity);
     }
 
@@ -46,6 +50,14 @@ public class Basket {
             }
         }
         return null;
+    }
+
+    private double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = BigDecimal.valueOf(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 
 
