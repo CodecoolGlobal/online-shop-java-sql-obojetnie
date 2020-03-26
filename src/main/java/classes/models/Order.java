@@ -19,4 +19,31 @@ public class Order {
         this.basket = basket;
         this.idUser = idUser;
     }
+
+    public Order(int id, Basket basket, int idUser) {
+        this.id = id;
+        this.creationDate = new Date();
+        this.basket = basket;
+        this.idUser = idUser;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public Basket getBasket() {
+        return basket;
+    }
+
+    public int getIdUser() {
+        return idUser;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+
+
+
 }

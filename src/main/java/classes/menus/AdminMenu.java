@@ -145,8 +145,8 @@ public class AdminMenu {
                         productController.editProductQuantity(productToEdit, newQuantity);
                     }
                     case 2 -> {
-                        int addon = input.getIntInputWithMessage("Enter amount to add: ");
-                        productController.updateQuantity(productToEdit, addon);
+                        int value = input.getIntInputWithMessage("Enter amount to add: ");
+                        productController.addQuantity(productToEdit, value);
                     }
                 }
 

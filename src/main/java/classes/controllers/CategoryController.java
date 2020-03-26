@@ -112,13 +112,14 @@ public class CategoryController {
             ResultSet rs = st.executeQuery(SELECT_SQL);
             while (rs.next()){
                 String name = rs.getString("Name");
-                return new Category(name);
+                return new Category(id, name);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
+
 
     public void deleteCategory(int id) {
         final String DELETE_SQL = "DELETE FROM categories WHERE id = ?;";

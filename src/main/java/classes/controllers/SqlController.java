@@ -6,16 +6,18 @@ import java.sql.SQLException;
 
 public class SqlController {
 
-    private SqlConnector sqlConnector;
     private CategoryController categoryController;
     private ProductController productController;
     private UserController userController;
+    private OrderController orderController;
+    private ProductsOrdersController productsOrdersController;
 
     public SqlController(SqlConnector sqlConnector) {
-        categoryController = new CategoryController(sqlConnector);
-        productController = new ProductController(sqlConnector);
-        userController = new UserController(sqlConnector);
-        this.sqlConnector = sqlConnector;
+        this.categoryController = new CategoryController(sqlConnector);
+        this.productController = new ProductController(sqlConnector);
+        this.userController = new UserController(sqlConnector);
+        this.orderController = new OrderController(sqlConnector);
+        this.productsOrdersController = new ProductsOrdersController(sqlConnector);
     }
 
     public CategoryController getCategoryController() {
@@ -30,8 +32,12 @@ public class SqlController {
         return userController;
     }
 
-    public SqlConnector getSqlConnector() {
-        return sqlConnector;
+    public OrderController getOrderController() {
+        return orderController;
+    }
+
+    public ProductsOrdersController getProductsOrdersController() {
+        return productsOrdersController;
     }
 
     public void disconnectController() throws SQLException {
@@ -41,6 +47,9 @@ public class SqlController {
         getUserController().getSt().close();
         getProductController().getC().close();
         getProductController().getSt().close();
-        sqlConnector.disconnectFromDatabase();
+        getOrderController().getC().close();
+        getOrderController().getSt().close();
+        getProductsOrdersController().getC().close();
+        getProductsOrdersController().getSt().close();
     }
 }

@@ -1,12 +1,12 @@
 package classes.menus;
 
 import classes.connectors.SqlConnector;
-import classes.controllers.ProductController;
-import classes.controllers.SqlController;
+import classes.controllers.*;
 import classes.enums.Option;
 import classes.inputs.InputTaker;
 import classes.menus.exceptions.OptionEnumException;
 import classes.models.Basket;
+import classes.models.Order;
 import classes.models.Product;
 import classes.users.Customer;
 import classes.users.User;
@@ -34,8 +34,8 @@ public class CustomerMenu {
         boolean isRunning = true;
         System.out.println("You are logged as customer");
         while (isRunning) {
-            viewListOfAvailableProducts();
             System.out.println("""
+
                     (1) Add product to basket
                     (2) Delete product from basket
                     (3) See all products from basket
@@ -57,10 +57,10 @@ public class CustomerMenu {
                     checkBasket();
                     break;
                 case FOUR:
-                    placeOrderMenu();
+                    placeOrder();
                     break;
                 case FIVE:
-                    ordersHistory();
+                    orderHistory();
                     break;
                 case SIX:
                     viewListOfAvailableProducts();
@@ -69,12 +69,10 @@ public class CustomerMenu {
                     viewProductsInCategory();
                     break;
                 case EIGHT:
-                    checkIfProductAvailable();
+                    checkIfProductIsAvailable();
                     break;
                 case ZERO:
                     isRunning = false;
-                default:
-                    throw new Exception("Something went wrong.");
             }
         }
     }
@@ -97,9 +95,8 @@ public class CustomerMenu {
             if (i == indexOfItem) {
                 basket.deleteProduct(product);
                 break;
-            } else {
-                i++;
             }
+            i++;
         }
     }
 
@@ -107,28 +104,32 @@ public class CustomerMenu {
         customer.getBasket().viewBasket();
     }
 
-    private void placeOrderMenu() throws Exception, OptionEnumException {
-        customer.getBasket().viewBasket();
-        Option option = input.getOptionIntWithMessage("""
-                Do you want to place order?
-                (1) Yes
-                (0) No
-                """);
+    private void placeOrder() throws Exception {
+        OrderController orderController = sqlController.getOrderController();
+        ProductsOrdersController productsOrdersController = sqlController.getProductsOrdersController();
+        ProductController productController = sqlController.getProductController();
 
-        switch (option) {
-            case ONE -> placeOrder();
-            case ZERO -> System.out.println();
-            default -> throw new OptionEnumException("No such option");
+        Basket basket = customer.getBasket();
+        int idUser = customer.getId();
+
+        Order newOrder = new Order(basket, idUser);
+        orderController.addOrder(newOrder);
+        Order orderWithId = orderController.getOrderFromDatabase(customer, newOrder);
+
+        Map<Product, Integer> basketMap = basket.getBasketMap();
+
+        for (Product product : basketMap.keySet()) {
+            int quantity = basketMap.get(product);
+            productsOrdersController.addProduct(product, quantity, orderWithId);
+            productController.decreaseQuantity(product, quantity);
         }
 
+        customer.addOrderToHistory(newOrder);
     }
 
-    private void placeOrder() {
-
-    }
-
-    private void ordersHistory() {
-
+    private void orderHistory() {
+        OrderController orderController = sqlController.getOrderController();
+        orderController.viewOrdersTable();
     }
 
     private void viewListOfAvailableProducts() throws SQLException {
@@ -138,11 +139,23 @@ public class CustomerMenu {
     }
 
     private void viewProductsInCategory() {
-
+        CategoryController categoryController = sqlController.getCategoryController();
+        categoryController.viewCategoriesTable();
+        ProductController productController = sqlController.getProductController();
+        int idCategory = input.getIntInputWithMessage("Select id of category whom products you want to see: ");
+        System.out.println("Category: " + categoryController.getCategoryFromDatabaseById(idCategory).getName());
+        productController.viewAllProductsFromCategory(idCategory);
     }
 
-    private void checkIfProductAvailable() {
-
+    private void checkIfProductIsAvailable() {
+        ProductController productController = sqlController.getProductController();
+        int id = input.getIntInputWithMessage("Insert id of product: ");
+        boolean isAvailable = productController.checkAvailability(id);
+        if (isAvailable) {
+            System.out.println("Available");
+        } else {
+            System.out.println("Not available");
+        }
     }
 
     private void rateItem() {

@@ -2,9 +2,13 @@ package classes.controllers;
 
 import classes.connectors.SqlConnector;
 import classes.categories.Category;
+import classes.menus.exceptions.AvailabilityException;
+import classes.models.Basket;
+import classes.models.Order;
 import classes.models.Product;
 
 import java.sql.*;
+import java.util.Map;
 
 public class ProductController {
 
@@ -38,6 +42,28 @@ public class ProductController {
         }
     }
 
+    public void viewAllProductsFromCategory(int categoryId) {
+        String SELECT_SQL = "SELECT * FROM products WHERE idcategory = '" +  categoryId + "';";
+
+        try {
+            ResultSet rs = st.executeQuery(SELECT_SQL);
+            while(rs.next()) {
+                int id = rs.getInt("Id");
+                String name = rs.getString("Name");
+                double price = rs.getDouble("Price");
+                int quantity = rs.getInt("Quantity");
+                int availability = rs.getInt("Availability");
+                int idCategory = rs.getInt("idCategory");
+                double rate = rs.getDouble("Rate");
+
+                String format = "|%1$-3s|%2$-18s|%3$-16s|%4$-30s|%5$-9s|%6$-20s|%7$-10s|\n";
+                System.out.printf(format, id, name, price, quantity, availability, idCategory, rate);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void addProduct(Product product) {
         final String INSERT_SQL = "INSERT INTO products (name, price, quantity, availability, idCategory, rate)" +
                 "VALUES (?, ?, ?, ?, ?, ?);";
@@ -64,7 +90,7 @@ public class ProductController {
 
         if (isProductInDatabase) {
             System.out.println("Product already in database. Updating quantity");
-            updateQuantity(product, product.getQuantity());
+            addQuantity(product, product.getQuantity());
         } else {
             try {
                 ps = this.c.prepareStatement(INSERT_SQL);
@@ -173,52 +199,23 @@ public class ProductController {
         }
     }
 
-
-    public Product getProductFromDatabase(String name) {
-        String SELECT_SQL = "SELECT * FROM products WHERE name = '" + name + "';";
-        try {
-            ResultSet rs = st.executeQuery(SELECT_SQL);
-            while (rs.next()) {
-                String nameOfProductInDatabase = rs.getString("Name");
-                double price = rs.getDouble("Price");
-                int quantity = rs.getInt("Quantity");
-                int availability = rs.getInt("Availability");
-                int idCategory = rs.getInt("idCategory");
-                double rate = rs.getDouble("Rate");
-                Category category = switch (idCategory) {
-                    case 1 -> new Category("Hygiene");
-                    case 2 -> new Category("Beverages");
-                    case 3 -> new Category("Food");
-                    default -> throw new IllegalStateException("Unexpected value: " + idCategory);
-                };
-
-                return new Product(nameOfProductInDatabase, price, quantity, category);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     public Product getProductFromDatabaseById(int id) {
-        String SELECT_SQL = "SELECT * FROM products WHERE id = '" + id + "';";
+        final String SELECT_SQL = "SELECT * FROM products WHERE id = '" + id + "';";
         try {
             ResultSet rs = st.executeQuery(SELECT_SQL);
             while (rs.next()) {
-                String nameOfProductInDatabase = rs.getString("Name");
+                String name = rs.getString("Name");
                 double price = rs.getDouble("Price");
                 int quantity = rs.getInt("Quantity");
-                int availability = rs.getInt("Availability");
                 int idCategory = rs.getInt("idCategory");
-                double rate = rs.getDouble("Rate");
                 Category category = switch (idCategory) {
-                    case 1 -> new Category("Hygiene");
-                    case 2 -> new Category("Beverages");
-                    case 3 -> new Category("Food");
+                    case 1 -> new Category(1, "Hygiene");
+                    case 2 -> new Category(2, "Beverages");
+                    case 3 -> new Category(3, "Food");
                     default -> throw new IllegalStateException("Unexpected value: " + idCategory);
                 };
 
-                return new Product(nameOfProductInDatabase, price, quantity, category);
+                return new Product(id, name, price, quantity, category);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -226,24 +223,53 @@ public class ProductController {
         return null;
     }
 
-    public void updateQuantity(Product product, int addon) {
-        String name = product.getName();
+    public void addQuantity(Product product, int value) {
+        int id = product.getId();
         int quantityOfProductInDatabase = product.getQuantity();
         final String UPDATE_SQL = "UPDATE products " +
                 "SET quantity = ? " +
-                " WHERE name = ?;";
+                " WHERE id = ?;";
 
         PreparedStatement ps = null;
 
         try {
             ps = this.c.prepareStatement(UPDATE_SQL);
-            ps.setInt(1, quantityOfProductInDatabase + addon);
-            ps.setString(2, name);
+            ps.setInt(1, quantityOfProductInDatabase + value);
+            ps.setInt(2, id);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+    public void decreaseQuantity(Product product, int value) {
+        int id = product.getId();
+        int quantityOfProductInDatabase = product.getQuantity();
+        final String UPDATE_SQL = "UPDATE products " +
+                "SET quantity = ? " +
+                " WHERE id = ?;";
+
+        PreparedStatement ps = null;
+
+        try {
+            ps = this.c.prepareStatement(UPDATE_SQL);
+            ps.setInt(1, quantityOfProductInDatabase - value);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void autoDecreaseQuantityBasedOnBasket(Basket basket) {
+        Map<Product, Integer> basketMap = basket.getBasketMap();
+
+        for (Product product : basketMap.keySet()) {
+            int quantity = basketMap.get(product);
+            decreaseQuantity(product, quantity);
+        }
+    }
+
     public void updateAvailability(Product product, int value) {
         String name = product.getName();
         final String UPDATE_SQL = "UPDATE products " +
@@ -275,6 +301,23 @@ public class ProductController {
             e.printStackTrace();
         }
     }
+
+    public boolean checkAvailability(int id) {
+        final String SELECT_SQL = "SELECT availability FROM products WHERE id = '" + id + "';";
+        boolean isAvailable = false;
+        try {
+            ResultSet rs = st.executeQuery(SELECT_SQL);
+            isAvailable = switch (rs.getInt("availability")) {
+                case 1 -> true;
+                case 0 -> false;
+                default -> throw new AvailabilityException("Wrong idAvailability");
+            };
+        } catch (Exception | AvailabilityException e) {
+            e.printStackTrace();
+        }
+        return isAvailable;
+    }
+
 
     public Connection getC() {
         return c;
