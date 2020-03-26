@@ -1,13 +1,12 @@
 package classes.menus;
 
 import classes.connectors.SqlConnector;
-import classes.controllers.OrderController;
-import classes.controllers.ProductController;
-import classes.controllers.SqlController;
+import classes.controllers.*;
 import classes.enums.Option;
 import classes.inputs.InputTaker;
 import classes.menus.exceptions.OptionEnumException;
 import classes.models.Basket;
+import classes.models.Order;
 import classes.models.Product;
 import classes.users.Customer;
 import classes.users.User;
@@ -58,7 +57,7 @@ public class CustomerMenu {
                     checkBasket();
                     break;
                 case FOUR:
-                    placeOrderMenu();
+                    placeOrder();
                     break;
                 case FIVE:
                     ordersHistory();
@@ -98,9 +97,8 @@ public class CustomerMenu {
             if (i == indexOfItem) {
                 basket.deleteProduct(product);
                 break;
-            } else {
-                i++;
             }
+            i++;
         }
     }
 
@@ -108,25 +106,27 @@ public class CustomerMenu {
         customer.getBasket().viewBasket();
     }
 
-    private void placeOrderMenu() throws Exception, OptionEnumException {
-        customer.getBasket().viewBasket();
-        Option option = input.getOptionIntWithMessage("""
-                Do you want to place order?
-                (1) Yes
-                (0) No
-                """);
+    private void placeOrder() throws Exception {
+        OrderController orderController = sqlController.getOrderController();
+        ProductsOrdersController productsOrdersController = sqlController.getProductsOrdersController();
+        ProductController productController = sqlController.getProductController();
 
-        switch (option) {
-            case ONE -> placeOrder();
-            case ZERO -> System.out.println();
-            default -> throw new OptionEnumException("No such option");
+        Basket basket = customer.getBasket();
+        int idUser = customer.getId();
+
+        Order newOrder = new Order(basket, idUser);
+        orderController.addOrder(newOrder);
+        Order orderWithId = orderController.getOrderFromDatabase(customer, newOrder);
+
+        Map<Product, Integer> basketMap = basket.getBasketMap();
+
+        for (Product product : basketMap.keySet()) {
+            int quantity = basketMap.get(product);
+            productsOrdersController.addProduct(product, quantity, orderWithId);
+            productController.decreaseQuantity(product, quantity);
         }
 
-    }
-
-    private void placeOrder() {
-        OrderController orderController = sqlController.getOrderController();
-        orderController.addOrder(customer);
+        customer.addOrderToHistory(newOrder);
     }
 
     private void ordersHistory() {

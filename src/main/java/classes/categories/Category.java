@@ -12,6 +12,11 @@ public class Category {
     private boolean isAvailable;
     private List<Product> productList;
 
+    public Category(int id, String name) {
+        this.name = name;
+        productList = new ArrayList<>();
+    }
+
     public Category(String name) {
         this.name = name;
         productList = new ArrayList<>();

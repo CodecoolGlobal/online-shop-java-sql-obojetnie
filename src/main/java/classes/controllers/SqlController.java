@@ -6,18 +6,18 @@ import java.sql.SQLException;
 
 public class SqlController {
 
-    private SqlConnector sqlConnector;
     private CategoryController categoryController;
     private ProductController productController;
     private UserController userController;
     private OrderController orderController;
+    private ProductsOrdersController productsOrdersController;
 
     public SqlController(SqlConnector sqlConnector) {
         this.categoryController = new CategoryController(sqlConnector);
         this.productController = new ProductController(sqlConnector);
         this.userController = new UserController(sqlConnector);
         this.orderController = new OrderController(sqlConnector);
-        this.sqlConnector = sqlConnector;
+        this.productsOrdersController = new ProductsOrdersController(sqlConnector);
     }
 
     public CategoryController getCategoryController() {
@@ -36,8 +36,8 @@ public class SqlController {
         return orderController;
     }
 
-    public SqlConnector getSqlConnector() {
-        return sqlConnector;
+    public ProductsOrdersController getProductsOrdersController() {
+        return productsOrdersController;
     }
 
     public void disconnectController() throws SQLException {
@@ -49,6 +49,7 @@ public class SqlController {
         getProductController().getSt().close();
         getOrderController().getC().close();
         getOrderController().getSt().close();
-        sqlConnector.disconnectFromDatabase();
+        getProductsOrdersController().getC().close();
+        getProductsOrdersController().getSt().close();
     }
 }

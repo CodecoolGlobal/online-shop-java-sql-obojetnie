@@ -1,12 +1,12 @@
 package classes.controllers;
 
 import classes.connectors.SqlConnector;
+import classes.models.Basket;
 import classes.models.Order;
 import classes.users.Customer;
-import classes.users.User;
 
 import java.sql.*;
-import java.time.LocalDate;
+import java.util.Date;
 
 public class OrderController {
 
@@ -37,16 +37,19 @@ public class OrderController {
         }
     }
 
-    public void addOrder(User user) {
+    public void addOrder(Order order) {
         final String INSERT_SQL = "INSERT INTO orders (date, idUser)" +
                 " VALUES (?, ?);";
+
+        String date = order.getCreationDate().toString();
+        int idUser = order.getIdUser();
 
         PreparedStatement ps = null;
 
         try {
             ps = this.c.prepareStatement(INSERT_SQL);
-            ps.setString(1, LocalDate.now().toString());
-            ps.setInt(2, user.getId());
+            ps.setString(1, date);
+            ps.setInt(2, idUser);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -60,13 +63,38 @@ public class OrderController {
             while (rs.next()) {
                 String date = rs.getString("Date");
                 int idUser = rs.getInt("idUser");
-                return new Order(customer.getBasket(), idUser);
+                Basket basket = customer.getBasket();
+                return new Order(idOrder, basket, idUser);
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
+        return null;
+    }
+
+    public Order getOrderFromDatabase(Customer customer, Order order) throws Exception {
+        int idOrder = order.getId();
+        String date = order.getCreationDate().toString();
+        int idUser = order.getIdUser();
+
+        if (idOrder == 0) {
+            final String SELECT_SQL = "SELECT * FROM orders WHERE idUser = '" + idUser + "' AND date = '" + date + "';";
+
+            try {
+                ResultSet rs = st.executeQuery(SELECT_SQL);
+                while (rs.next()) {
+                    idOrder = rs.getInt("Id");
+                    return new Order(idOrder, customer.getBasket(), idUser);
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } else {
+            getOrderFromDatabaseById(customer, idOrder);
+        }
         return null;
     }
 

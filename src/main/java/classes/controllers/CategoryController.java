@@ -112,7 +112,7 @@ public class CategoryController {
             ResultSet rs = st.executeQuery(SELECT_SQL);
             while (rs.next()){
                 String name = rs.getString("Name");
-                return new Category(name);
+                return new Category(id, name);
             }
         } catch (SQLException e) {
             e.printStackTrace();
