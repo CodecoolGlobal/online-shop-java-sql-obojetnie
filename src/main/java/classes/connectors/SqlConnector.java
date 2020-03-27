@@ -1,5 +1,7 @@
 package classes.connectors;
 
+import org.sqlite.SQLiteConfig;
+
 import java.sql.*;
 
 public class SqlConnector {
@@ -15,9 +17,14 @@ public class SqlConnector {
     public void connectToDatabase() {
         try {
             Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:src/main/resources/shop");
+            SQLiteConfig config = new SQLiteConfig();
+            config.enforceForeignKeys(false);
+            config.setJournalMode(SQLiteConfig.JournalMode.WAL);
+            config.setBusyTimeout(5000);
+            config.setTransactionMode(SQLiteConfig.TransactionMode.EXCLUSIVE);
+            c = DriverManager.getConnection("jdbc:sqlite:src/main/resources/shop", config.toProperties());
 
-            c.setAutoCommit(false);
+//            c.setAutoCommit(false);
 
             st = c.createStatement();
 
@@ -35,15 +42,9 @@ public class SqlConnector {
         return c;
     }
 
-    public void setC(Connection c) {
-        this.c = c;
-    }
 
     public Statement getSt() {
         return st;
     }
 
-    public void setSt(Statement st) {
-        this.st = st;
-    }
 }
