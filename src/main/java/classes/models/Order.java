@@ -1,7 +1,6 @@
 package classes.models;
 
 import classes.enums.OrderStatus;
-import classes.users.User;
 
 import java.util.Date;
 
@@ -42,8 +41,6 @@ public class Order {
     public Date getCreationDate() {
         return creationDate;
     }
-
-
 
 
 }

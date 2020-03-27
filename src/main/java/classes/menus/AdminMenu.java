@@ -33,7 +33,7 @@ public class AdminMenu {
 
     public void displayAdminMenu() throws Exception, AvailabilityException, OptionEnumException {
         boolean isRunning = true;
-        System.out.println("You are logged as admin");
+        System.out.println("You are logged as an admin");
         while (isRunning) {
             System.out.println("""
                     (1) Create new product
@@ -54,7 +54,7 @@ public class AdminMenu {
                 case SIX -> editCategory();
                 case SEVEN -> deleteProduct();
                 case ZERO -> isRunning = false;
-                default -> throw new OptionEnumException("No such field in OptionEnum");
+                default -> System.out.println("Wrong input.");
             }
         }
     }
@@ -77,16 +77,19 @@ public class AdminMenu {
         categoryController.viewCategoriesTable();
         int idOfCategoryToDelete = input.getIntInputWithMessage("Enter id of category you want to edit: ");
         String newName = input.getStringInputWithMessage("Enter new name: ");
-        categoryController.editCategoryNameById(idOfCategoryToDelete, newName);
+        String formattedNewName = newName.substring(0, 1).toUpperCase() + newName.substring(1).toLowerCase();
+        categoryController.editCategoryNameById(idOfCategoryToDelete, formattedNewName);
     }
 
     public void addProduct() throws SQLException {
         String productName = input.getStringInputWithMessage("Enter a product name: ");
+        String formattedProductName = productName.substring(0, 1).toUpperCase() + productName.substring(1).toLowerCase();
         double productPrice = input.getDoubleInputWithMessage("Enter price of product: ");
         int productQuantity = input.getIntInputWithMessage("Enter quantity of product: ");
-        String productCategory = input.getStringInputWithMessage("Enter product Category: ");
-        Category category = new Category(productCategory);
-        sqlController.getProductController().addProduct(new Product(productName, productPrice, productQuantity, category));
+        String productCategoryName = input.getStringInputWithMessage("Enter product Category: ");
+        String formattedProductCategoryName = productCategoryName.substring(0, 1).toUpperCase() + productCategoryName.substring(1).toLowerCase();
+        Category category = new Category(formattedProductCategoryName);
+        sqlController.getProductController().addProduct(new Product(formattedProductName, productPrice, productQuantity, category));
     }
 
     public void deleteProduct() throws SQLException {
@@ -143,7 +146,7 @@ public class AdminMenu {
                 productController.editProductCategory(productToEdit, newCategory);
                 break;
             default:
-                throw new Exception("Something went wrong.");
+                System.out.println("Wrong input.");
         }
     }
 
@@ -154,9 +157,9 @@ public class AdminMenu {
         Product product = productController.getProductFromDatabaseById(productId);
 
         int availability = switch (input.getIntInputWithMessage("""
-        Choose availability:
-        (1) Available
-        (0) Not available""")) {
+                Choose availability:
+                (1) Available
+                (0) Not available""")) {
             case 1 -> 1;
             case 0 -> 0;
             default -> throw new AvailabilityException("Non existing availability case");
@@ -164,11 +167,4 @@ public class AdminMenu {
         productController.updateAvailability(product, availability);
     }
 
-    public void checkOngoingOrders() {
-
-    }
-
-    public void collectFeedback() {
-
-    }
 }

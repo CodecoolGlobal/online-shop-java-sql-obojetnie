@@ -32,7 +32,7 @@ public class CustomerMenu {
 
     public void displayCustomerMenu() throws Exception, OptionEnumException {
         boolean isRunning = true;
-        System.out.println("You are logged as customer");
+        System.out.println("You are logged as a customer");
         while (isRunning) {
             System.out.println("""
 
@@ -73,6 +73,8 @@ public class CustomerMenu {
                     break;
                 case ZERO:
                     isRunning = false;
+                default:
+                    System.out.println("Wrong input.");
             }
         }
     }
@@ -87,7 +89,7 @@ public class CustomerMenu {
 
     private void deleteItemFromBasket() {
         checkBasket();
-        int indexOfItem = input.getIntInputWithMessage("Select index of item to delete: ");
+        int indexOfItem = input.getIntInputWithMessage("\nSelect index of item to delete: ");
         Basket basket = customer.getBasket();
         Map<Product, Integer> basketMap = basket.getBasketMap();
         int i = 1;

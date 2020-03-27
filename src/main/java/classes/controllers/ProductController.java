@@ -1,10 +1,9 @@
 package classes.controllers;
 
-import classes.connectors.SqlConnector;
 import classes.categories.Category;
+import classes.connectors.SqlConnector;
 import classes.menus.exceptions.AvailabilityException;
 import classes.models.Basket;
-import classes.models.Order;
 import classes.models.Product;
 
 import java.sql.*;
@@ -43,11 +42,11 @@ public class ProductController {
     }
 
     public void viewAllProductsFromCategory(int categoryId) {
-        String SELECT_SQL = "SELECT * FROM products WHERE idcategory = '" +  categoryId + "';";
+        String SELECT_SQL = "SELECT * FROM products WHERE idcategory = '" + categoryId + "';";
 
         try {
             ResultSet rs = st.executeQuery(SELECT_SQL);
-            while(rs.next()) {
+            while (rs.next()) {
                 int id = rs.getInt("Id");
                 String name = rs.getString("Name");
                 double price = rs.getDouble("Price");
@@ -108,6 +107,7 @@ public class ProductController {
             }
         }
     }
+
     public boolean getIsProductInDatabase(Product product) {
         String name = product.getName();
 
@@ -125,6 +125,7 @@ public class ProductController {
         }
         return false;
     }
+
     public void editProductName(Product product, String newName) {
         String nameOfProductInDatabase = product.getName();
 

@@ -29,9 +29,11 @@ public class Basket {
     }
 
     public void viewBasket() {
-        String format = "|%1$-3s|%2$-18s|%3$-5s|%4$-4s|%5$-5s|\n";
-        int i = 1;
 
+        String format = "|%1$-7s|%2$-18s|%3$-7s|%4$-10s|%5$-6s|\n";
+        System.out.printf(format, "index", "name", "price", "quantity", "rate");
+
+        int i = 1;
         for (Product product : basket.keySet()) {
             String name = product.getName();
             double price = product.getPrice();
