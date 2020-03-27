@@ -53,6 +53,7 @@ public class AdminMenu {
                 case FIVE -> deleteCategory();
                 case SIX -> editCategory();
                 case SEVEN -> deleteProduct();
+                case ZERO -> isRunning = false;
                 default -> throw new OptionEnumException("No such field in OptionEnum");
             }
         }
