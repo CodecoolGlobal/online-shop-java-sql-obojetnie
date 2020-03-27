@@ -64,10 +64,12 @@ public class ProductController {
         }
     }
 
-    public void addProduct(Product product) {
+    public void addProduct(Product product) throws SQLException {
         final String INSERT_SQL = "INSERT INTO products (name, price, quantity, availability, idCategory, rate)" +
                 "VALUES (?, ?, ?, ?, ?, ?);";
-
+        if (c.isClosed()) {
+            System.out.println("Connection still open ... ");
+        }
         String name = product.getName();
         double price = product.getPrice();
         int quantity = product.getQuantity();

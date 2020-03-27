@@ -46,29 +46,15 @@ public class AdminMenu {
                     (0) Quit""");
             Option option = input.getOptionInt();
             switch (option) {
-                case ONE:
-                    addProduct();
-                    break;
-                case TWO:
-                    createCategory();
-                    break;
-                case THREE:
-                    editProduct();
-                    break;
-                case FOUR:
-                    deactivateProduct();
-                    break;
-                case FIVE:
-                    deleteCategory();
-                    break;
-                case SIX:
-                    editCategory();
-                    break;
-                case SEVEN:
-                    deleteProduct();
-                    break;
-                default:
-                    throw new OptionEnumException("No such field in OptionEnum");
+                case ONE -> addProduct();
+                case TWO -> createCategory();
+                case THREE -> editProduct();
+                case FOUR -> deactivateProduct();
+                case FIVE -> deleteCategory();
+                case SIX -> editCategory();
+                case SEVEN -> deleteProduct();
+                case ZERO -> isRunning = false;
+                default -> throw new OptionEnumException("No such field in OptionEnum");
             }
         }
     }
@@ -94,13 +80,12 @@ public class AdminMenu {
         categoryController.editCategoryNameById(idOfCategoryToDelete, newName);
     }
 
-    public void addProduct() {
+    public void addProduct() throws SQLException {
         String productName = input.getStringInputWithMessage("Enter a product name: ");
         double productPrice = input.getDoubleInputWithMessage("Enter price of product: ");
         int productQuantity = input.getIntInputWithMessage("Enter quantity of product: ");
         String productCategory = input.getStringInputWithMessage("Enter product Category: ");
         Category category = new Category(productCategory);
-
         sqlController.getProductController().addProduct(new Product(productName, productPrice, productQuantity, category));
     }
 

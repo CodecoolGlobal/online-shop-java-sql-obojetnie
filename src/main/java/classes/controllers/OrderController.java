@@ -6,7 +6,6 @@ import classes.models.Order;
 import classes.users.Customer;
 
 import java.sql.*;
-import java.util.Date;
 
 public class OrderController {
 
@@ -56,22 +55,21 @@ public class OrderController {
         }
     }
 
-    public Order getOrderFromDatabaseById(Customer customer, int idOrder) throws Exception {
+    public void getOrderFromDatabaseById(Customer customer, int idOrder) throws Exception {
         final String SELECT_SQL = "SELECT * FROM orders WHERE id = '" + idOrder + "'";
         try {
             ResultSet rs = st.executeQuery(SELECT_SQL);
-            while (rs.next()) {
+            if (rs.next()) {
                 String date = rs.getString("Date");
                 int idUser = rs.getInt("idUser");
                 Basket basket = customer.getBasket();
-                return new Order(idOrder, basket, idUser);
+                new Order(idOrder, basket, idUser);
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return null;
     }
 
     public Order getOrderFromDatabase(Customer customer, Order order) throws Exception {
@@ -84,7 +82,7 @@ public class OrderController {
 
             try {
                 ResultSet rs = st.executeQuery(SELECT_SQL);
-                while (rs.next()) {
+                if (rs.next()) {
                     idOrder = rs.getInt("Id");
                     return new Order(idOrder, customer.getBasket(), idUser);
                 }
